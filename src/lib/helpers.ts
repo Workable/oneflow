@@ -78,7 +78,7 @@ export async function getTagPrompt(tag, msg, nextRelease?) {
   return (fs.existsSync('package.json') ? 'v' : '') + semver.valid(tag);
 }
 
-export function createTag(tag) {
+export function createTag(tag, branch?) {
   if (fs.existsSync('package.json')) {
     exec(`npm version ${tag}`);
   } else if (fs.existsSync('pom.xml')) {
@@ -93,7 +93,8 @@ export function createTag(tag) {
   } else {
     exec(`git tag ${tag}`);
   }
-  config.RUN_CMD_AFTER_TAG_CREATION && exec(config.RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag));
+  config.RUN_CMD_AFTER_TAG_CREATION &&
+    exec(config.RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag).replace('${branch}', branch), true, true);
 }
 
 export async function prompt(msg) {

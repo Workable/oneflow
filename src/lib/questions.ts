@@ -54,5 +54,11 @@ export const initializeConfig = config => [
     type: 'input',
     message: 'Rewrite commits (during feature-close) to have as a prefix the feature-name?',
     default: config.REWRITE_COMMITS
+  },
+  {
+    name: 'RUN_CMD_AFTER_TAG_CREATION',
+    type: 'input',
+    message: 'Run a command after creating a tag?',
+    default: config.RUN_CMD_AFTER_TAG_CREATION
   }
 ];

@@ -8,6 +8,7 @@ const packageJson = require('../../package.json');
 
 export default async function initialize() {
   const sampleConfig = require('../../config.sample.json');
+  Object.assign(sampleConfig, config);
   console.log(chalk.yellow(figlet.textSync(packageJson.name, { horizontalLayout: 'full' })));
   console.log(chalk.magenta(`Welcome to ${packageJson.name}. Please follow the steps bellow to configure it!\n\n`));
 
