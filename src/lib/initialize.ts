@@ -16,9 +16,9 @@ export default async function initialize() {
   Object.assign(config, answers, { initialized: true });
 
   config.save();
-  console.log(chalk.magenta('Your ~/.oneflowrc file has been created! You are ready to use trunk.'));
-  console.log(chalk.magenta('Type trunk -h to see available commands'));
+  console.log(chalk.magenta('Your ~/.oneflowrc file has been created! You are ready to use oneflow.'));
+  console.log(chalk.magenta('Type oneflow -h to see available commands'));
   console.log(
-    `${chalk.magenta('To add autocomplete support type:')} ${chalk.bold.magenta('trunk completion >> ~/.bashrc')}`
+    `${chalk.magenta('To add autocomplete support type:')} ${chalk.bold.magenta('oneflow completion >> ~/.bashrc')}`
   );
 }
