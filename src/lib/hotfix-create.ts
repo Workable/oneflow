@@ -6,7 +6,6 @@ import * as semver from 'semver';
 export default async function hotfixCreate(branch, tag) {
   exec('git fetch origin --tags --prune');
   tag = await getTagPrompt(tag, 'checkout tag?');
-  console.log(tag, semver.inc(tag, 'patch'));
   branch = await getBranchPrompt(branch, semver.inc(tag, 'patch'));
 
   exec(`git checkout -b ${branch} refs/tags/${tag}`);
