@@ -60,5 +60,11 @@ export const initializeConfig = config => [
     type: 'input',
     message: 'Run a command after creating a tag?',
     default: config.RUN_CMD_AFTER_TAG_CREATION
+  },
+  {
+    name: 'CHANGE_VERSIONS_WHEN_TAGGING',
+    type: 'confirm',
+    message: 'Change versions when creating a tag (hotfix-close, release-close) currently supporting nodejs, java ?',
+    default: config.CHANGE_VERSIONS_WHEN_TAGGING
   }
 ];

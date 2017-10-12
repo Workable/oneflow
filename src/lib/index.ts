@@ -42,6 +42,7 @@ program
 program
   .command('release-create [tag]')
   .description('Creates a release from master')
+  .option('-c --close', 'Opens and closes the release creating a tag')
   .action(releaseCreate);
 
 program

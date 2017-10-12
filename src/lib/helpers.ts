@@ -79,9 +79,9 @@ export async function getTagPrompt(tag, msg, nextRelease?) {
 }
 
 export function createTag(tag, branch?) {
-  if (fs.existsSync('package.json')) {
+  if (config.CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('package.json')) {
     exec(`npm version ${tag}`);
-  } else if (fs.existsSync('pom.xml')) {
+  } else if (config.CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
     exec(
       `mvn release:prepare -DpushChanges=false -Dresume=false -DdevelopmentVersion=${semver.inc(
         tag,

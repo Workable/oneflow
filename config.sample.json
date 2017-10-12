@@ -2,5 +2,6 @@
   "NO_FF": false,
   "REWRITE_COMMITS": true,
   "BASE_BRANCH": "master",
-  "RUN_CMD_AFTER_TAG_CREATION": ""
+  "RUN_CMD_AFTER_TAG_CREATION": "",
+  "CHANGE_VERSIONS_WHEN_TAGGING": true
 }
