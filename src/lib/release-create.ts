@@ -7,7 +7,7 @@ export default async function releaseCreate(tag, options) {
   exec('git fetch origin --tags --prune');
   tag = await getTagPrompt(tag, 'release tag?', 'minor');
 
-  await featureCreate(getReleaseName(tag));
+  await featureCreate(getReleaseName(tag), { forcePush: options.forcePush || options.close });
 
   if (options.close) {
     await releaseClose(tag, options);

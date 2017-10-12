@@ -30,6 +30,7 @@ program
 program
   .command('feature-create [branch]')
   .description('Create locally a feature branch from latest master')
+  .option('-f --force-push', 'Pushes local changes to remote')
   .action(featureCreate);
 
 program
@@ -43,6 +44,7 @@ program
 program
   .command('release-create [tag]')
   .description('Creates a release from master')
+  .option('-f --force-push', 'Pushes local changes to remote')
   .option('-c --close', 'Opens and closes the release creating a tag')
   .action(releaseCreate);
 

@@ -6,13 +6,13 @@ import { getCurrentBranch, pushToRemote } from './helpers';
 import * as homeConfig from 'home-config';
 const config = homeConfig.load('.oneflowrc');
 
-export default async function featureCreate(branch) {
+export default async function featureCreate(branch, options) {
   if (!branch) {
     ({ branchName: branch } = await inquirer.prompt(branchName()));
   }
   exec(`git checkout ${config.BASE_BRANCH}`);
   exec('git pull');
   exec(`git checkout -b ${branch};`);
-  await pushToRemote(false, false, branch);
+  await pushToRemote(options.forcePush, false, branch);
   console.log(chalk.blue(`currently in branch ${getCurrentBranch()}`));
 }
