@@ -26,7 +26,7 @@ export function merge(
   }
   exec(`git checkout ${to}`);
   exec('git pull');
-  exec(`git merge ${from} ${noff ? '--no-ff' : ''}`);
+  exec(`git merge ${from} ${noff ? '--no-ff' : '--ff-only'}`);
 }
 
 export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?) {
