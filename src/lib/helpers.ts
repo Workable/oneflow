@@ -21,7 +21,7 @@ export function merge(
   if (rebase) {
     exec(`git rebase ${rebaseTo}`);
     if (rewriteCommits) {
-      exec(`git filter-branch -f --msg-filter 'echo "${from}:" && cat' ${rebaseTo}..${from}`);
+      exec(`git filter-branch -f --msg-filter 'sed s/^${from}\\:\\ // | sed s/^/${from}\\:\\ /' ${rebaseTo}..${from}`);
     }
   }
   exec(`git checkout ${to}`);
