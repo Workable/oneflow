@@ -36,7 +36,8 @@ program
   .command('feature-close [branch]')
   .description('Close a feature branch to master')
   .option('-f --force-push', 'Pushes local changes to remote')
-  .option('-s --stop-rewrite', 'Will not rewrite commit messages with feature as prefix.')
+  .option('-r --rewrite', 'Will rewrite commit messages with feature as prefix.')
+  .option('-n --no-ff', 'Will run merge with no-ff')
   .action(featureClose);
 
 program

@@ -3,10 +3,20 @@ import { getBranchPrompt, merge, pushBranchToRemoteAndDelete } from './helpers';
 import * as homeConfig from 'home-config';
 const config = homeConfig.load('.oneflowrc');
 
+function useDefault(d, value = d) {
+  return value;
+}
+
 export default async function featureClose(branch, options) {
   branch = await getBranchPrompt(branch);
 
-  merge(branch, config.BASE_BRANCH, config.NO_FF, true, config.REWRITE_COMMITS && !options.stopRewrite);
+  merge(
+    branch,
+    config.BASE_BRANCH,
+    !options.ff || config.NO_FF,
+    true,
+    useDefault(config.REWRITE_COMMITS, options.rewrite)
+  );
 
   await pushBranchToRemoteAndDelete(branch, options.forcePush);
 
