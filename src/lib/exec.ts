@@ -11,6 +11,6 @@ export default function(str, log = true, interactive = false) {
     }
   } catch (e) {
     console.log(chalk.red(e));
-    process.exit(-1);
+    process.exit(1);
   }
 }
