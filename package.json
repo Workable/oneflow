@@ -11,7 +11,7 @@
     "prewatch": "npm run clean",
     "watch": "tsc -w -p .",
     "prepublishOnly": "npm test",
-    "preinstall": "npm run build",
+    "install": "npm run build",
     "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
     "pretest": "npm run lint && npm run build",
     "test": "istanbul test ./node_modules/.bin/_mocha build/test -- --recursive -R spec",
