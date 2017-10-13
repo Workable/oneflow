@@ -12,7 +12,7 @@ export function merge(from, to, noff = config.NO_FF, rebase = false, rewriteComm
   exec(`git checkout ${to}`);
   exec('git pull');
   exec(`git checkout ${from}`);
-  exec('git pull');
+  exec('git pull', true, false, false);
   if (rebase) {
     if (rewriteCommits) {
       exec(`git filter-branch -f --msg-filter 'sed s/^${from}\\:\\ // | sed s/^/${from}\\:\\ /' ${to}..${from}`);

@@ -1,7 +1,7 @@
 import * as chalk from 'chalk';
 import { execSync } from 'child_process';
 
-export default function(str, log = true, interactive = false) {
+export default function(str, log = true, interactive = false, exit = true) {
   log && console.log(chalk.yellow(`-> ${str}`));
   const options = { stdio: interactive ? 'inherit' : 'pipe' };
   try {
@@ -11,6 +11,6 @@ export default function(str, log = true, interactive = false) {
     }
   } catch (e) {
     console.log(chalk.red(e));
-    process.exit(1);
+    exit && process.exit(1);
   }
 }
