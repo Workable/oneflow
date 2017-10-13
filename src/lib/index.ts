@@ -55,7 +55,7 @@ program
   .action(releaseClose);
 
 program
-  .command('initialize')
+  .command('configure')
   .description('Runs the initialize wizard')
   .action(initialize);
 
