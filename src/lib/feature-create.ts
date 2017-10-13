@@ -10,8 +10,9 @@ export default async function featureCreate(branch, options) {
   if (!branch) {
     ({ branchName: branch } = await inquirer.prompt(branchName()));
   }
-  exec(`git checkout ${config.BASE_BRANCH}`);
-  exec('git pull');
+  const checkoutBranch = options.releaseFrom || config.BASE_BRANCH;
+  exec(`git checkout ${checkoutBranch}`);
+  checkoutBranch === config.BASE_BRANCH && exec('git pull');
   exec(`git checkout -b ${branch};`);
   await pushToRemote(options.forcePush, false, branch);
   console.log(chalk.blue(`currently in branch ${getCurrentBranch()}`));

@@ -42,8 +42,8 @@ program
   .action(featureClose);
 
 program
-  .command('release-create [tag]')
-  .description('Creates a release from master')
+  .command('release-create [commit] [tag]')
+  .description('Creates a release from commit or master')
   .option('-f --force-push', 'Pushes local changes to remote')
   .option('-c --close', 'Opens and closes the release creating a tag')
   .action(releaseCreate);

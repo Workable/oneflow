@@ -1,6 +1,6 @@
 import exec from './exec';
 import * as chalk from 'chalk';
-import { createTag, pushBranchToRemoteAndDelete, getBranchPrompt, getTagPrompt, merge } from './helpers';
+import { createTag, pushBranchToRemoteAndDelete, getBranchPrompt, getTagPrompt } from './helpers';
 import * as homeConfig from 'home-config';
 const config = homeConfig.load('.oneflowrc');
 
