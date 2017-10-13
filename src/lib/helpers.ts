@@ -18,7 +18,7 @@ export function merge(from, to, noff = config.NO_FF, rebase = false, rewriteComm
       exec(`git filter-branch -f --msg-filter 'sed s/^${from}\\:\\ // | sed s/^/${from}\\:\\ /' ${to}..${from}`);
     }
     if (interactive || parseInt(exec(`git log --oneline ${to}..${from}|grep fixup|wc -l`), 10) > 0) {
-      exec(`git rebase -i ${to} --autosquash`);
+      exec(`git rebase -i ${to} --autosquash`, true, true);
     } else {
       exec(`git rebase ${to}`);
     }
