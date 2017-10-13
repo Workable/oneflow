@@ -15,7 +15,8 @@ export default async function featureClose(branch, options) {
     config.BASE_BRANCH,
     !options.ff || config.NO_FF,
     true,
-    useDefault(config.REWRITE_COMMITS, options.rewrite)
+    useDefault(config.REWRITE_COMMITS, options.rewrite),
+    options.interactive
   );
 
   await pushBranchToRemoteAndDelete(branch, options.forcePush);

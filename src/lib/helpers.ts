@@ -7,25 +7,23 @@ import * as semver from 'semver';
 import * as homeConfig from 'home-config';
 const config = homeConfig.load('.oneflowrc');
 
-export function merge(
-  from,
-  to,
-  noff = config.NO_FF,
-  rebase = false,
-  rewriteCommits = false,
-  rebaseTo = `origin/${to}`
-) {
+export function merge(from, to, noff = config.NO_FF, rebase = false, rewriteCommits = false, interactive = false) {
   exec('git fetch origin --tags --prune');
+  exec(`git checkout ${to}`);
+  exec('git pull');
   exec(`git checkout ${from}`);
   exec('git pull');
   if (rebase) {
-    exec(`git rebase ${rebaseTo}`);
     if (rewriteCommits) {
-      exec(`git filter-branch -f --msg-filter 'sed s/^${from}\\:\\ // | sed s/^/${from}\\:\\ /' ${rebaseTo}..${from}`);
+      exec(`git filter-branch -f --msg-filter 'sed s/^${from}\\:\\ // | sed s/^/${from}\\:\\ /' ${to}..${from}`);
+    }
+    if (interactive || parseInt(exec(`git log --oneline ${to}..${from}|grep fixup|wc -l`), 10) > 0) {
+      exec(`git rebase -i ${to} ${from} --autosquash`);
+    } else {
+      exec(`git rebase ${to}`);
     }
   }
   exec(`git checkout ${to}`);
-  exec('git pull');
   exec(`git merge ${from} ${noff ? '--no-ff' : '--ff-only'}`);
 }
 
