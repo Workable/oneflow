@@ -6,8 +6,8 @@ const config = homeConfig.load('.oneflowrc');
 
 export default async function hotfixClose(branch, tag, options) {
   exec('git fetch origin --tags --prune');
-  const latestTagCommit = exec('git rev-list --tags --max-count=1', false);
-  const latestTag = exec(`git describe --tags ${latestTagCommit}`, false);
+  const latestTagCommit = exec('git rev-list --tags --max-count=1', { log: false });
+  const latestTag = exec(`git describe --tags ${latestTagCommit}`, { log: false });
 
   branch = await getBranchPrompt(branch);
   tag = await getTagPrompt(tag, 'create tag?', 'patch');

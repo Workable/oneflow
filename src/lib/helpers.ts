@@ -12,13 +12,13 @@ export function merge(from, to, noff = config.NO_FF, rebase = false, rewriteComm
   exec(`git checkout ${to}`);
   exec('git pull');
   exec(`git checkout ${from}`);
-  exec('git pull', true, false, false);
+  exec('git pull', { exit: false });
   if (rebase) {
     if (rewriteCommits) {
       exec(`git filter-branch -f --msg-filter 'sed s/^${from}\\:\\ // | sed s/^/${from}\\:\\ /' ${to}..${from}`);
     }
     if (interactive || parseInt(exec(`git log --oneline ${to}..${from}|grep fixup|wc -l`), 10) > 0) {
-      exec(`git rebase -i ${to} --autosquash`, true, true);
+      exec(`git rebase -i ${to} --autosquash`, { interactive: true });
     } else {
       exec(`git rebase ${to}`);
     }
@@ -51,7 +51,7 @@ Please run: ${chalk.red(`git branch -d ${branch} && git push origin :refs/heads/
 }
 
 export function getCurrentBranch() {
-  return exec('git branch |grep \\* | sed s/*//g', false);
+  return exec('git branch |grep \\* | sed s/*//g', { log: false });
 }
 
 export async function getBranchPrompt(branch, defaultName?) {
@@ -64,8 +64,8 @@ export async function getBranchPrompt(branch, defaultName?) {
 
 export async function getTagPrompt(tag, msg, nextRelease?) {
   if (!tag) {
-    const latestTagCommit = exec('git rev-list --tags --max-count=1', false);
-    const latestTag = await exec(`git describe --tags ${latestTagCommit}`, false);
+    const latestTagCommit = exec('git rev-list --tags --max-count=1', { log: false });
+    const latestTag = await exec(`git describe --tags ${latestTagCommit}`, { log: false });
     if (nextRelease) {
       tag = (latestTag.startsWith('v') ? 'v' : '') + semver.inc(latestTag, nextRelease);
     } else {
@@ -85,14 +85,13 @@ export function createTag(tag, branch?) {
         tag,
         'minor'
       )}-SNAPSHOT -DreleaseVersion=${tag} -Dtag=${tag} -Darguments=-DskipTests --offline`,
-      true,
-      true
+      { interactive: true }
     );
   } else {
     exec(`git tag ${tag}`);
   }
   config.RUN_CMD_AFTER_TAG_CREATION &&
-    exec(config.RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag).replace('${branch}', branch), true, true);
+    exec(config.RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag).replace('${branch}', branch), { interactive: true });
 }
 
 export async function prompt(msg) {
