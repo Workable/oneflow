@@ -10,7 +10,7 @@ export default function(str, { log = true, interactive = false, exit = true } = 
       return output.toString().trim();
     }
   } catch (e) {
-    console.log(chalk.red(e));
+    console.log((exit && chalk.red(e)) || chalk.magenta(e));
     exit && process.exit(1);
   }
 }
