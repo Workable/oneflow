@@ -1,4 +1,4 @@
-import exec from './exec';
+import exec, { revert } from './exec';
 import * as inquirer from 'inquirer';
 import { branchName, confirm, tagName } from './questions';
 import * as chalk from 'chalk';
@@ -7,11 +7,21 @@ import * as semver from 'semver';
 import * as homeConfig from 'home-config';
 const config = homeConfig.load('.oneflowrc');
 
+function getCurrentCommit() {
+  return exec('git log --pretty=format:"%H" -1', { log: false });
+}
+
+export function revertBranch(branch) {
+  revert(`git checkout ${branch} && git reset --hard ${getCurrentCommit()}`);
+}
+
 export function merge(from, to, noff = config.NO_FF, rebase = false, rewriteCommits = false, interactive = false) {
   exec('git fetch origin --tags --prune');
   exec(`git checkout ${to}`);
+  revertBranch(to);
   exec('git pull');
   exec(`git checkout ${from}`);
+  revertBranch(from);
   exec('git pull', { exit: false });
   if (rebase) {
     if (rewriteCommits) {
@@ -76,7 +86,8 @@ export async function getTagPrompt(tag, msg, nextRelease?) {
   return (fs.existsSync('package.json') ? 'v' : '') + semver.valid(tag);
 }
 
-export function createTag(tag, branch?) {
+export function createTag(tag, branch) {
+  revertBranch(branch);
   if (config.CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('package.json')) {
     exec(`npm version ${tag}`);
   } else if (config.CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
@@ -90,6 +101,7 @@ export function createTag(tag, branch?) {
   } else {
     exec(`git tag ${tag}`);
   }
+  revert(`git tag -d ${tag}`);
   config.RUN_CMD_AFTER_TAG_CREATION &&
     exec(config.RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag).replace('${branch}', branch), { interactive: true });
 }
