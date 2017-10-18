@@ -18,7 +18,9 @@ export default function exec(str, { log = true, interactive = false, exit = true
 
 const cmds = [];
 export function revert(cmd) {
-  cmds.unshift(cmd);
+  if (cmds.indexOf(cmd) === -1) {
+    cmds.unshift(cmd);
+  }
 }
 
 function runRevert() {
