@@ -1,6 +1,6 @@
 import exec from './exec';
 import * as chalk from 'chalk';
-import { createTag, pushBranchToRemoteAndDelete, getBranchPrompt, getTagPrompt } from './helpers';
+import { createTag, pushBranchToRemoteAndDelete, getBranchPrompt, getTagPrompt, revertBranch } from './helpers';
 import * as homeConfig from 'home-config';
 const config = homeConfig.load('.oneflowrc');
 
@@ -13,6 +13,7 @@ export default async function hotfixClose(branch, tag, options) {
   tag = await getTagPrompt(tag, 'create tag?', 'patch');
 
   exec(`git checkout ${branch}`);
+  revertBranch(branch);
   exec('git pull');
   exec(`git rebase refs/tags/${latestTag}`);
 
