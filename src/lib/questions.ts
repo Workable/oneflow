@@ -66,5 +66,11 @@ export const initializeConfig = config => [
     type: 'confirm',
     message: 'Change versions when creating a tag (hotfix-close, release-close) currently supporting nodejs, java ?',
     default: config.CHANGE_VERSIONS_WHEN_TAGGING
+  },
+  {
+    name: 'PACKAGE_JSON_URL',
+    type: 'input',
+    message: 'Package version url ?',
+    default: config.PACKAGE_JSON_URL
   }
 ];

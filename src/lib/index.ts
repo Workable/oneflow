@@ -14,24 +14,30 @@ import featureCreate from './feature-create';
 import featureClose from './feature-close';
 import releaseCreate from './release-create';
 import releaseClose from './release-close';
+import { hasVersionChanged } from './helpers';
 const packageJson = require('../../package.json');
+
+const wrap = fn => async (...args) => {
+  await hasVersionChanged();
+  await fn(...args);
+};
 
 program
   .command('hotfix-create [branch] [from-tag]')
   .description('Create locally a hotfix branch from latest tag')
-  .action(hotfixCreate);
+  .action(wrap(hotfixCreate));
 
 program
   .command('hotfix-close [branch] [tag]')
   .description('Close a hotfix branch from latest tag to master creating a tag')
   .option('-f --force-push', 'Pushes local changes to remote')
-  .action(hotfixClose);
+  .action(wrap(hotfixClose));
 
 program
   .command('feature-create [branch]')
   .description('Create locally a feature branch from latest master')
   .option('-f --force-push', 'Pushes local changes to remote')
-  .action(featureCreate);
+  .action(wrap(featureCreate));
 
 program
   .command('feature-close [branch]')
@@ -41,7 +47,7 @@ program
   .option('-r --rewrite', 'Will rewrite commit messages with feature as prefix.')
   .option('-R --no-rewrite-history', 'Will not rewrite commits')
   .option('-n --no-ff', 'Will run merge with no-ff')
-  .action(featureClose);
+  .action(wrap(featureClose));
 
 program
   .command('release-create [commit] [tag]')
@@ -49,14 +55,14 @@ program
   .option('-f --force-push', 'Pushes local changes to remote')
   .option('-c --close', 'Opens and closes the release creating a tag')
   .option('-M --no-merge', 'Will not merge after creating tag if called with -c')
-  .action(releaseCreate);
+  .action(wrap(releaseCreate));
 
 program
   .command('release-close [tag]')
   .description('Close a release to master')
   .option('-f --force-push', 'Pushes local changes to remote')
   .option('-M --no-merge', 'Will not merge after creating tag')
-  .action(releaseClose);
+  .action(wrap(releaseClose));
 
 program
   .command('configure')

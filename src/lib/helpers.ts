@@ -5,7 +5,25 @@ import * as chalk from 'chalk';
 import * as fs from 'fs';
 import * as semver from 'semver';
 import * as homeConfig from 'home-config';
+import * as moment from 'moment';
 const config = homeConfig.load('.oneflowrc');
+const packageJson = require('../../package.json');
+
+export async function hasVersionChanged() {
+  if (moment().isAfter(moment(config.LAST_CHECKED).add('1 day'))) {
+    return;
+  }
+  const currentVersion = packageJson.version;
+  const upstreamVersion = JSON.parse(exec(`curl ${config.PACKAGE_JSON_URL}`, { log: false, exit: false })).version;
+  if (semver.gt(upstreamVersion, currentVersion)) {
+    console.log('New version exists...');
+    if (await prompt(`Update to latest version ${upstreamVersion}`)) {
+      exec('npm install -g https://github.com/Workable/oneflow#master', { interactive: true });
+    }
+  }
+  config.LAST_CHECKED = new Date();
+  config.save();
+}
 
 function getCurrentCommit() {
   return exec('git log --pretty=format:"%H" -1', { log: false });
