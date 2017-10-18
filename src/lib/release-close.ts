@@ -9,6 +9,9 @@ export default async function releaseClose(tag, options) {
   const releaseName = getReleaseName(tag);
   await createTag(tag, releaseName);
 
+  if (!options.merge) {
+    return;
+  }
   merge(releaseName, config.BASE_BRANCH);
 
   await pushBranchToRemoteAndDelete(releaseName, options.forcePush);
