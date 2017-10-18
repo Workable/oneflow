@@ -15,7 +15,7 @@ export default async function featureClose(branch, options) {
     config.BASE_BRANCH,
     !options.ff || config.NO_FF,
     true,
-    useDefault(config.REWRITE_COMMITS, options.rewrite),
+    useDefault(options.rewriteHistory && config.REWRITE_COMMITS, options.rewrite),
     options.interactive
   );
 

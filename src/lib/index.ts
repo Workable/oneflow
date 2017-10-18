@@ -39,7 +39,7 @@ program
   .option('-f --force-push', 'Pushes local changes to remote')
   .option('-i --interactive', 'Interactive rebase')
   .option('-r --rewrite', 'Will rewrite commit messages with feature as prefix.')
-  .option('-R --no-rewrite', 'Will not rewrite commits')
+  .option('-R --no-rewrite-history', 'Will not rewrite commits')
   .option('-n --no-ff', 'Will run merge with no-ff')
   .action(featureClose);
 
