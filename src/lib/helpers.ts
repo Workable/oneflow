@@ -15,7 +15,11 @@ export function revertBranch(branch) {
   revert(`git checkout ${branch} && git reset --hard ${getCurrentCommit()}`);
 }
 
-export function merge(from, to, noff = config.NO_FF, rebase = false, rewriteCommits = false, interactive = false) {
+export function merge(
+  from,
+  to,
+  { noff = config.NO_FF, enforceFF = true, rebase = false, rewriteCommits = false, interactive = false } = {}
+) {
   exec('git fetch origin --tags --prune');
   exec(`git checkout ${to}`);
   revertBranch(to);
@@ -34,7 +38,7 @@ export function merge(from, to, noff = config.NO_FF, rebase = false, rewriteComm
     }
   }
   exec(`git checkout ${to}`);
-  exec(`git merge ${from} ${noff ? '--no-ff' : '--ff-only'}`);
+  exec(`git merge ${from} ${noff ? '--no-ff' : enforceFF ? '--ff-only' : ''}`);
 }
 
 export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?) {
