@@ -48,12 +48,14 @@ program
   .description('Creates a release from commit or master')
   .option('-f --force-push', 'Pushes local changes to remote')
   .option('-c --close', 'Opens and closes the release creating a tag')
+  .option('-M --no-merge', 'Will not merge after creating tag if called with -c')
   .action(releaseCreate);
 
 program
   .command('release-close [tag]')
   .description('Close a release to master')
   .option('-f --force-push', 'Pushes local changes to remote')
+  .option('-M --no-merge', 'Will not merge after creating tag')
   .action(releaseClose);
 
 program
