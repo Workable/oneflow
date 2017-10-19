@@ -10,7 +10,7 @@ const config = homeConfig.load('.oneflowrc');
 const packageJson = require('../../package.json');
 
 export async function hasVersionChanged() {
-  if (moment().isBefore(moment(config.LAST_CHECKED).add(1, 'day'))) {
+  if (!!config.LAST_CHECKED && moment().isBefore(moment(config.LAST_CHECKED).add(1, 'day'))) {
     return;
   }
   const currentVersion = packageJson.version;
