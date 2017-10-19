@@ -4,14 +4,20 @@
     "module": "commonjs",
     "noImplicitAny": false,
     "removeComments": true,
+    "skipLibCheck": true,
     "noLib": false,
     "preserveConstEnums": true,
     "declaration": true,
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "./build",
-    "sourceMap": true
+    "baseUrl": "./src",
+    "sourceMap": true,
+    "paths": {
+      "*": [
+        "*",
+        "lib/*"
+      ]
+    }
   },
-  "filesGlob": [
-    "./*.ts"
-  ]
+  "filesGlob": ["./*.ts"]
 }

@@ -14,7 +14,7 @@ export default async function hotfixClose(branch, tag, options) {
 
   exec(`git checkout ${branch}`);
   revertBranch(branch);
-  exec('git pull');
+  exec('git pull', { exit: false });
   exec(`git rebase refs/tags/${latestTag}`);
 
   await createTag(tag, branch);

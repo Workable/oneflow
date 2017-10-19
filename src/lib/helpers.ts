@@ -46,13 +46,14 @@ export function merge(
   revertBranch(from);
   exec('git pull', { exit: false });
   if (rebase) {
-    if (rewriteCommits) {
-      exec(`git filter-branch -f --msg-filter 'sed 1s/^${from}\\:\\ // | sed 1s/^/${from}\\:\\ /' ${to}..${from}`);
-    }
+    revert('git rebase --abort');
     if (interactive || parseInt(exec(`git log --oneline ${to}..${from}|grep fixup|wc -l`), 10) > 0) {
       exec(`git rebase -i ${to} --autosquash`, { interactive: true });
     } else {
       exec(`git rebase ${to}`);
+    }
+    if (rewriteCommits) {
+      exec(`git filter-branch -f --msg-filter 'sed 1s/^${from}\\:\\ // | sed 1s/^/${from}\\:\\ /' ${to}..${from}`);
     }
   }
   exec(`git checkout ${to}`);

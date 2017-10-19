@@ -25,6 +25,7 @@ const wrap = fn => async (...args) => {
 program
   .command('hotfix-create [branch] [from-tag]')
   .description('Create locally a hotfix branch from latest tag')
+  .option('-f --force-push', 'Pushes local changes to remote')
   .action(wrap(hotfixCreate));
 
 program

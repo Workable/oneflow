@@ -25,6 +25,6 @@ export function revert(cmd) {
 
 function runRevert() {
   for (const cmd of cmds) {
-    exec(cmd);
+    exec(cmd, { exit: false });
   }
 }
