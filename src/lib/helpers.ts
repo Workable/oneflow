@@ -10,7 +10,7 @@ const config = homeConfig.load('.oneflowrc');
 const packageJson = require('../../package.json');
 
 export async function hasVersionChanged() {
-  if (moment().isAfter(moment(config.LAST_CHECKED).add('1 day'))) {
+  if (moment().isBefore(moment(config.LAST_CHECKED).add(1, 'day'))) {
     return;
   }
   const currentVersion = packageJson.version;
@@ -21,7 +21,7 @@ export async function hasVersionChanged() {
       exec('npm install -g https://github.com/Workable/oneflow#master', { interactive: true });
     }
   }
-  config.LAST_CHECKED = new Date();
+  config.LAST_CHECKED = new Date().toISOString();
   config.save();
 }
 
