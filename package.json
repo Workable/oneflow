@@ -1,6 +1,6 @@
 {
   "name": "oneflow",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "OneFlow cli tool",
   "private": true,
   "main": "build/lib/index.js",
