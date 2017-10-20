@@ -1,4 +1,4 @@
-import exec from './exec';
+import exec, { revert } from './exec';
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
 import { branchName } from './questions';
@@ -14,6 +14,7 @@ export default async function featureCreate(branch, options) {
   exec(`git checkout ${checkoutBranch}`);
   checkoutBranch === config.BASE_BRANCH && exec('git pull');
   exec(`git checkout -b ${branch};`);
+  revert(`git branch -d ${branch}`);
   await pushToRemote(options.forcePush, false, branch);
   console.log(chalk.blue(`currently in branch ${getCurrentBranch()}`));
 }
