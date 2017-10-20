@@ -118,7 +118,7 @@ export function createTag(tag, branch) {
       `mvn release:prepare -DpushChanges=false -Dresume=false -DdevelopmentVersion=${semver.inc(
         tag,
         'minor'
-      )}-SNAPSHOT -DreleaseVersion=${tag} -Dtag=${tag} -Darguments=-DskipTests --offline`,
+      )}-SNAPSHOT -DreleaseVersion=${tag} -Dtag=${tag} -Darguments=-DskipTests`,
       { interactive: true }
     );
   } else {
