@@ -12,7 +12,7 @@ export default async function releaseClose(tag, options) {
   if (!options.merge) {
     return;
   }
-  merge(releaseName, config.BASE_BRANCH, { enforceFF: false });
+  await merge(releaseName, config.BASE_BRANCH, { enforceFF: false });
 
   await pushBranchToRemoteAndDelete(releaseName, options.forcePush);
 

@@ -49,7 +49,7 @@ before(function() {
     return this;
   };
 
-  this.commit = (msg, file) => this.local(`echo "test">>${file} && git add . && git commit -m "${msg}"`);
+  this.commit = (msg, file = 'init.txt') => this.local(`echo ${msg}>>${file} && git add . && git commit -m "${msg}"`);
 
   this.getCommit = (branch = '') => ({
     commit: this.runLocal(`git log --pretty=format:"%H" -1 ${branch}`),

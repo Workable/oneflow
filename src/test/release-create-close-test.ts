@@ -43,4 +43,16 @@ describe('release-create release-close', function() {
       .assertLocalContainsBranch('release-6.0.0')
       .assertRemoteContainsBranch('release-6.0.0');
   });
+
+  it('creates release from master and closes it after resolving conflict', function() {
+    const { commit, commitMsg } = this.getCommit('master');
+    this.oneflow('release-create master 7.0.0 -f')
+      .commit('test')
+      .checkout('master')
+      .commit('tests')
+      .checkout('release-7.0.0')
+      .oneflow('release-close 7.0.0 -f');
+
+    //TODO somehow continue dialog in release-close after merge failure
+  });
 });

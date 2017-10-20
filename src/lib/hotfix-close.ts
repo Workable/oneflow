@@ -1,6 +1,13 @@
-import exec from './exec';
+import exec, { revert } from './exec';
 import * as chalk from 'chalk';
-import { createTag, pushBranchToRemoteAndDelete, getBranchPrompt, getTagPrompt, revertBranch } from './helpers';
+import {
+  createTag,
+  pushBranchToRemoteAndDelete,
+  getBranchPrompt,
+  getTagPrompt,
+  revertBranch,
+  recover
+} from './helpers';
 import * as homeConfig from 'home-config';
 const config = homeConfig.load('.oneflowrc');
 
@@ -21,7 +28,11 @@ export default async function hotfixClose(branch, tag, options) {
 
   exec(`git checkout ${config.BASE_BRANCH}`);
   exec('git pull');
-  exec(`git merge ${branch}`);
+  revert(`git reset --hard HEAD`);
+  await exec(`git merge ${branch}`, {
+    exit: false,
+    recover: recover('Merge conflict exists. Please fix your conflicts.')
+  });
 
   await pushBranchToRemoteAndDelete(branch, options.forcePush);
   console.log(chalk.blue(`closed hotfix ${branch} to ${config.BASE_BRANCH} creating tag ${tag}`));

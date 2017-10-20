@@ -1,4 +1,4 @@
-import exec, { revert } from './exec';
+import exec, { revert, runRevert } from './exec';
 import * as inquirer from 'inquirer';
 import { branchName, confirm, tagName } from './questions';
 import * as chalk from 'chalk';
@@ -33,7 +33,7 @@ export function revertBranch(branch) {
   revert(`git checkout ${branch} && git reset --hard ${getCurrentCommit()}`);
 }
 
-export function merge(
+export async function merge(
   from,
   to,
   { noff = config.NO_FF, enforceFF = true, rebase = false, rewriteCommits = false, interactive = false } = {}
@@ -46,18 +46,29 @@ export function merge(
   revertBranch(from);
   exec('git pull', { exit: false });
   if (rebase) {
-    revert('git rebase --abort');
+    revert('git reset --hard HEAD');
     if (interactive || parseInt(exec(`git log --oneline ${to}..${from}|grep fixup|wc -l`), 10) > 0) {
-      exec(`git rebase -i ${to} --autosquash`, { interactive: true });
+      exec(`git rebase -i ${to} --autosquash`, {
+        interactive: true,
+        exit: false,
+        recover: recover('Rebase conflict exists. Please fix manually')
+      });
     } else {
-      exec(`git rebase ${to}`);
+      await exec(`git rebase ${to}`, {
+        exit: false,
+        recover: recover('Rebase conflict exists. Please fix manually')
+      });
     }
     if (rewriteCommits) {
       exec(`git filter-branch -f --msg-filter 'sed 1s/^${from}\\:\\ // | sed 1s/^/${from}\\:\\ /' ${to}..${from}`);
     }
   }
   exec(`git checkout ${to}`);
-  exec(`git merge ${from} ${noff ? '--no-ff' : enforceFF ? '--ff-only' : ''}`);
+  revert('git reset --hard HEAD');
+  await exec(`git merge ${from} ${noff ? '--no-ff' : enforceFF ? '--ff-only' : ''}`, {
+    exit: false,
+    recover: recover('Merge conflict exists. Please fix manually')
+  });
 }
 
 export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?) {
@@ -129,10 +140,21 @@ export function createTag(tag, branch) {
     exec(config.RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag).replace('${branch}', branch), { interactive: true });
 }
 
-export async function prompt(msg) {
+export async function prompt(msg): Promise<boolean> {
   return (await inquirer.prompt(confirm(msg))).confirm;
 }
 
 export function getReleaseName(tag) {
   return `release-${tag}`;
+}
+
+export function recover(msg) {
+  return async () => {
+    if (await prompt(`${msg}\n Then press y to continue`)) {
+      console.log(chalk.magenta('continuing'));
+    } else {
+      runRevert();
+      process.exit(1);
+    }
+  };
 }
