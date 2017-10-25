@@ -125,12 +125,12 @@ export function createTag(tag, branch) {
   if (config.CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('package.json')) {
     exec(`npm version ${tag}`);
   } else if (config.CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
+    exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${tag} && git commit -am "[oneflow] ${tag}"`);
+    exec(`git tag ${tag}`);
+    const nextVersion = `${semver.inc(tag, 'minor')}-SNAPSHOT`;
     exec(
-      `mvn release:prepare -DpushChanges=false -Dresume=false -DdevelopmentVersion=${semver.inc(
-        tag,
-        'minor'
-      )}-SNAPSHOT -DreleaseVersion=${tag} -Dtag=${tag} -Darguments=-DskipTests`,
-      { interactive: true }
+      `mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${nextVersion} \
+       && git commit -am "[oneflow] prepare for next development iteration ${nextVersion}"`
     );
   } else {
     exec(`git tag ${tag}`);

@@ -45,7 +45,7 @@ describe('release-create release-close', function() {
   });
 
   it('creates release from master and closes it after resolving conflict', function() {
-    const { commit, commitMsg } = this.getCommit('master');
+    // const { commit, commitMsg } = this.getCommit('master');
     this.oneflow('release-create master 7.0.0 -f')
       .commit('test')
       .checkout('master')
