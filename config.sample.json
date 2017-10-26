@@ -4,6 +4,5 @@
   "BASE_BRANCH": "master",
   "RUN_CMD_AFTER_TAG_CREATION": "",
   "CHANGE_VERSIONS_WHEN_TAGGING": true,
-  "PACKAGE_JSON_URL":
-    "https://raw.githubusercontent.com/Workable/oneflow/master/package.json?token=ABVXvv9wwhRug3rBLdKOBL2_mkVH0aRrks5Z8I4-wA=="
+  "GET_VERSION": ""
 }

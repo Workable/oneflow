@@ -10,11 +10,11 @@ const config = homeConfig.load('.oneflowrc');
 const packageJson = require('../../package.json');
 
 export async function hasVersionChanged() {
-  if (!!config.LAST_CHECKED && moment().isBefore(moment(config.LAST_CHECKED).add(1, 'day'))) {
+  if (!config.GET_VERSION || (!!config.LAST_CHECKED && moment().isBefore(moment(config.LAST_CHECKED).add(1, 'day')))) {
     return;
   }
   const currentVersion = packageJson.version;
-  const upstreamVersion = JSON.parse(exec(`curl ${config.PACKAGE_JSON_URL}`, { log: false, exit: false })).version;
+  const upstreamVersion = exec(config.GET_VERSION, { log: false });
   if (semver.gt(upstreamVersion, currentVersion)) {
     console.log('New version exists...');
     if (await prompt(`Update to latest version ${upstreamVersion}`)) {
