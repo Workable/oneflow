@@ -33,7 +33,7 @@ export const confirm = (message = 'confirm?') => ({
   name: 'confirm',
   type: 'confirm',
   message,
-  default: false
+  default: true
 });
 
 export const initializeConfig = config => [
