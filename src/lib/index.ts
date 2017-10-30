@@ -31,6 +31,7 @@ program
 program
   .command('hotfix-close [branch] [tag]')
   .description('Close a hotfix branch from latest tag to master creating a tag')
+  .option('-R --no-rebase', 'Will not rebase to latest hotfix')
   .option('-f --force-push', 'Pushes local changes to remote')
   .action(wrap(hotfixClose));
 
