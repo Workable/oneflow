@@ -18,7 +18,7 @@ describe('hotfix-create hotfix-close', function() {
     const { commit, commitMsg } = this.getCommit();
 
     this.oneflow('hotfix-close hotfix2 2.0.1 -f')
-      .assertLocalCommitMsg("Merge branch 'hotfix2'")
+      .assertLocalCommitMsg("Merge branch 'refs/heads/hotfix2'")
       .checkout('2.0.1')
       .assertLocalOnCommit(commit)
       .assertLocalCommitMsg(commitMsg);

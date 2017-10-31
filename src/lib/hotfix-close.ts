@@ -31,7 +31,7 @@ export default async function hotfixClose(branch, tag, options) {
   exec(`git checkout ${config.BASE_BRANCH}`);
   exec('git pull');
   revert(`git reset --hard HEAD`);
-  await exec(`git merge ${branch}`, {
+  await exec(`git merge refs/heads/${branch}`, {
     exit: false,
     recover: recover('Merge conflict exists. Please fix your conflicts.')
   });
