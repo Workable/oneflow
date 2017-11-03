@@ -48,7 +48,7 @@ export async function merge(
   if (rebase) {
     revert('git reset --hard HEAD');
     if (interactive || parseInt(exec(`git log --oneline ${to}..${from}|grep fixup|wc -l`), 10) > 0) {
-      exec(`git rebase -i ${to} --autosquash`, {
+      await exec(`git rebase -i ${to} --autosquash`, {
         interactive: true,
         exit: false,
         recover: recover('Rebase conflict exists. Please fix manually')
