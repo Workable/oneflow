@@ -14,7 +14,7 @@ export default async function featureCreate(branch, options) {
   exec(`git checkout ${checkoutBranch}`);
   checkoutBranch === config.BASE_BRANCH && exec('git pull');
   exec(`git checkout -b ${branch};`);
-  revert(`git branch -d ${branch}`);
+  revert(`git checkout ${config.BASE_BRANCH} && git branch -d ${branch}`);
   await pushToRemote(options.forcePush, false, branch);
   console.log(chalk.blue(`currently in branch ${getCurrentBranch()}`));
 }
