@@ -8,15 +8,14 @@ function createRepos() {
       '&& echo "test">init.txt && git add . && git commit -m "initial commit" && git push --set-upstream origin master'
   );
 }
-const commit = (msg, file = 'init.txt') =>
-  exec(`cd example-repos/local && echo '${msg}'>>${file} && git add . && git commit -m "${msg}"`);
+const execLocal = cmd => exec(`cd example-repos/local && ${cmd}`);
+const commit = (msg, file = 'init.txt') => execLocal(`echo '${msg}'>>${file} && git add . && git commit -m "${msg}"`);
 const tag = tag => exec(`cd example-repos/local && git tag ${tag}`);
-const fixup = (msg, file = 'init.txt') =>
-  exec(`cd example-repos/local && echo '${msg}'>>${file} && git add . && git commit --fixup HEAD`);
+const fixup = (msg, file = 'init.txt') => execLocal(`echo '${msg}'>>${file} && git add . && git commit --fixup HEAD`);
 
 function feature() {
   createRepos();
-  exec('cd example-repos/local && git checkout -b feature1');
+  execLocal('git checkout -b feature1');
   commit('commit 1');
   commit('commit 2');
   commit('commit 3');
@@ -34,7 +33,7 @@ async function hotfix() {
   commit('commit 5');
   tag('1.0.0');
   await new Promise(r => setTimeout(r, 1000));
-  exec('cd example-repos/local && git push --tags origin master');
+  execLocal('git push --tags origin master');
   commit('commit 6');
   commit('commit 7');
   commit('commit 8');
@@ -45,12 +44,31 @@ async function hotfix() {
   commit('commit 11');
   commit('commit 13');
   commit('commit 14');
-  exec('cd example-repos/local && git push --tags origin master');
+  execLocal('git push --tags origin master');
+}
+
+async function release() {
+  createRepos();
+  commit('commit 1');
+  commit('commit 2');
+  commit('commit 3');
+  commit('commit 4');
+  commit('commit 5');
+  tag('1.0.0');
+  await new Promise(r => setTimeout(r, 1000));
+  execLocal('git push --tags origin master');
+  commit('commit 6');
+  commit('commit 7');
+  commit('commit 8');
+  commit('commit 9');
+  let c = execLocal(`git log --pretty=format:"%H" -4| tail -1`);
+  execLocal(`git checkout -b release-1.1.0 ${c}`);
 }
 
 module.exports = {
   feature,
   hotfix,
-  commit
+  commit,
+  release
   // release
 };
