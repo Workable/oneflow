@@ -47,6 +47,7 @@ export async function merge(
   exec('git pull', { exit: false });
   if (rebase) {
     revert('git reset --hard HEAD');
+    revert('git rebase --abort');
     if (interactive || parseInt(exec(`git log --oneline ${to}..${from}|grep fixup|wc -l`), 10) > 0) {
       await exec(`git rebase -i ${to} --autosquash`, {
         interactive: true,

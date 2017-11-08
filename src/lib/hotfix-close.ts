@@ -23,7 +23,11 @@ export default async function hotfixClose(branch, tag, options) {
   revertBranch(branch);
   exec('git pull', { exit: false });
   if (options.rebase) {
-    exec(`git rebase refs/tags/${latestTag}`);
+    revert('git rebase --abort');
+    await exec(`git rebase refs/tags/${latestTag}`, {
+      exit: false,
+      recover: recover('Rebase conflict exists. Please fix your conflicts.')
+    });
   }
 
   await createTag(tag, branch);
