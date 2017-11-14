@@ -84,12 +84,12 @@ export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?
 
 export async function pushBranchToRemoteAndDelete(branch, shouldPush?) {
   if (shouldPush || (await prompt('Force push changes to remote?'))) {
-    exec(`git push origin refs/heads/${branch}:refs/heads/${branch} -f`); // push branch changes
+    exec(`git push origin refs/heads/${branch}:refs/heads/${branch} --force-with-lease`); // push branch changes
     exec(`git push --tags origin ${config.BASE_BRANCH}`);
     exec(`git branch -d ${branch} && git push origin :refs/heads/${branch}`);
     return true;
   } else {
-    console.log(`Please run: ${chalk.red(`git push origin refs/heads/${branch}:refs/heads/${branch} -f`)}
+    console.log(`Please run: ${chalk.red(`git push origin refs/heads/${branch}:refs/heads/${branch} --force-with-lease`)}
 Please run: ${chalk.red(`git push --tags origin ${config.BASE_BRANCH}`)}
 Please run: ${chalk.red(`git branch -d ${branch} && git push origin :refs/heads/${branch}`)}`);
   }
