@@ -75,9 +75,9 @@ export async function merge(
 export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?) {
   if (shouldPush || (await prompt('Push changes to remote?'))) {
     exec(
-      `git push ${setUpstreamBranch ? `--set-upstream origin ${setUpstreamBranch}` : ''} ${tags
-        ? '&& git push --tags'
-        : ''}`
+      `git push ${setUpstreamBranch ? `--set-upstream origin ${setUpstreamBranch}` : ''} ${
+        tags ? '&& git push --tags' : ''
+      }`
     );
   }
 }
@@ -85,11 +85,19 @@ export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?
 export async function pushBranchToRemoteAndDelete(branch, shouldPush?) {
   if (shouldPush || (await prompt('Force push changes to remote?'))) {
     exec(`git push origin refs/heads/${branch}:refs/heads/${branch} --force-with-lease`); // push branch changes
-    exec(`git push --tags origin ${config.BASE_BRANCH}`);
+    await exec(`git push --tags origin ${config.BASE_BRANCH}`, {
+      exit: false,
+      recover: recover(
+        'Could not push to remote.',
+        "Press Y to retry or N to revert. Note that remote won't be reverted"
+      )
+    });
     exec(`git branch -d ${branch} && git push origin :refs/heads/${branch}`);
     return true;
   } else {
-    console.log(`Please run: ${chalk.red(`git push origin refs/heads/${branch}:refs/heads/${branch} --force-with-lease`)}
+    console.log(`Please run: ${chalk.red(
+      `git push origin refs/heads/${branch}:refs/heads/${branch} --force-with-lease`
+    )}
 Please run: ${chalk.red(`git push --tags origin ${config.BASE_BRANCH}`)}
 Please run: ${chalk.red(`git branch -d ${branch} && git push origin :refs/heads/${branch}`)}`);
   }
@@ -149,9 +157,9 @@ export function getReleaseName(tag) {
   return `release-${tag}`;
 }
 
-export function recover(msg) {
+export function recover(msg, then = 'Then press y to continue') {
   return async () => {
-    if (await prompt(`${msg}\n Then press y to continue`)) {
+    if (await prompt(`${msg}\n ${then}`)) {
       console.log(chalk.magenta('continuing'));
     } else {
       runRevert();
