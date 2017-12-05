@@ -10,7 +10,7 @@ export default async function initialize() {
   const sampleConfig = require('../../config.sample.json');
   Object.assign(sampleConfig, config);
   console.log(chalk.yellow(figlet.textSync(packageJson.name, { horizontalLayout: 'full' })));
-  console.log(chalk.magenta(`Welcome to ${packageJson.name}. Please follow the steps bellow to configure it!\n\n`));
+  console.log(chalk.magenta(`Welcome to ${packageJson.name}. Please follow the steps below to configure it!\n\n`));
 
   const answers = await inquirer.prompt(initializeConfig(sampleConfig));
   Object.assign(config, answers, { initialized: true });
