@@ -24,7 +24,9 @@ export default async function hotfixClose(branch, tag, options) {
   exec('git pull', { exit: false });
   if (options.rebase) {
     revert('git rebase --abort');
-    await exec(`git rebase refs/tags/${latestTag}`, {
+    const interactive = parseInt(exec(`git log --oneline refs/tags/${latestTag}..${branch}|grep fixup|wc -l`), 10) > 0;
+    await exec(`git rebase ${interactive ? '-i' : ''} refs/tags/${latestTag} ${interactive ? '--autosquash' : ''}`, {
+      interactive,
       exit: false,
       recover: recover('Rebase conflict exists. Please fix your conflicts.')
     });
