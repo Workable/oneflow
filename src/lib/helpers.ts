@@ -36,7 +36,14 @@ export function revertBranch(branch) {
 export async function merge(
   from,
   to,
-  { noff = config.NO_FF, enforceFF = true, rebase = false, rewriteCommits = false, interactive = false } = {}
+  {
+    noff = config.NO_FF,
+    enforceFF = true,
+    rebase = false,
+    rewriteCommits = false,
+    interactive = false,
+    squash = false
+  } = {}
 ) {
   exec('git fetch origin --tags --prune');
   exec(`git checkout ${to}`);
@@ -66,10 +73,16 @@ export async function merge(
   }
   exec(`git checkout ${to}`);
   revert('git reset --hard HEAD');
-  await exec(`git merge ${from} ${noff ? '--no-ff' : enforceFF ? '--ff-only' : ''}`, {
+
+  await exec(`git merge ${from} ${noff ? '--no-ff' : enforceFF ? '--ff-only' : ''} ${squash ? '--squash' : ''}`, {
     exit: false,
     recover: recover('Merge conflict exists. Please fix manually')
   });
+
+  if (squash) {
+    const msg = `${from}\n\n${exec(`git log --oneline ${to}..${from}`)}`;
+    await exec(`git commit -m "${msg}"`);
+  }
 }
 
 export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?) {

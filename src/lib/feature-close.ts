@@ -14,7 +14,8 @@ export default async function featureClose(branch, options) {
     noff: !options.ff || config.NO_FF,
     rebase: true,
     rewriteCommits: useDefault(options.rewriteHistory && config.REWRITE_COMMITS, options.rewrite),
-    interactive: options.interactive
+    interactive: options.interactive,
+    squash: options.squash
   });
 
   await pushBranchToRemoteAndDelete(branch, options.forcePush);

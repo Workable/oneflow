@@ -49,6 +49,7 @@ program
   .option('-r --rewrite', 'Will rewrite commit messages with feature as prefix.')
   .option('-R --no-rewrite-history', 'Will not rewrite commits')
   .option('-n --no-ff', 'Will run merge with no-ff')
+  .option('-s --squash', 'Will squash commits into 1')
   .action(wrap(featureClose));
 
 program

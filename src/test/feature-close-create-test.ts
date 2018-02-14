@@ -29,6 +29,23 @@ describe('feature-create feature-close', function() {
     this.assertLocalCommitMsg(commitMsg);
   });
 
+  it('should create feature and then close it with squash', function() {
+    this.oneflow('feature-create test4-branch -f').commit('1st commit');
+    const { commit, commitMsg } = this.getCommit();
+    this.commit('2ond commit');
+    const { commit: commit2, commitMsg: commitMsg2 } = this.getCommit();
+
+    this.assertLocalContainsBranch('* test4-branch')
+      .oneflow('feature-close test4-branch -f -R -s')
+      .assertLocalContainsBranch('* master')
+      .assertLocalDoesNotContainBranch('test4-branch')
+      .assertRemoteDoesNotContainBranch('test4-branch');
+
+    this.assertLocalCommitMultiLineMsg(
+      `test4-branch\n\n${commit2.substr(0, 7)} ${commitMsg2}\n${commit.substr(0, 7)} ${commitMsg}`
+    );
+  });
+
   it('should create feature and then close it with no-ff', function() {
     this.oneflow('feature-create test4-branch -f').commit('1st commit');
     const { commitMsg } = this.getCommit();
