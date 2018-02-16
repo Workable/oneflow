@@ -13,11 +13,11 @@ describe('hotfix-create hotfix-close', function() {
     this.tag('2.0.0');
     this.commit('going forward...')
       .commit('and forward')
-      .oneflow('hotfix-create hotfix2 2.0.0 -f')
+      .oneflow('hotfix-create hotfix2 2.0.0 -p')
       .commit('hotfix commit', 'file.txt');
     const { commit, commitMsg } = this.getCommit();
 
-    this.oneflow('hotfix-close hotfix2 2.0.1 -f')
+    this.oneflow('hotfix-close hotfix2 2.0.1 -p')
       .assertLocalCommitMsg("Merge branch 'refs/heads/hotfix2'")
       .checkout('2.0.1')
       .assertLocalOnCommit(commit)

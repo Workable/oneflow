@@ -8,10 +8,10 @@ import {
   revertBranch,
   recover
 } from './helpers';
-import * as homeConfig from 'home-config';
-const config = homeConfig.load('.oneflowrc');
+import { getConfig } from './config';
 
 export default async function hotfixClose(branch, tag, options) {
+  const config = getConfig(options);
   exec('git fetch origin --tags --prune');
   const latestTagCommit = exec('git rev-list --tags --max-count=1', { log: false });
   const latestTag = exec(`git describe --tags ${latestTagCommit}`, { log: false });
@@ -22,9 +22,11 @@ export default async function hotfixClose(branch, tag, options) {
   exec(`git checkout ${branch}`);
   revertBranch(branch);
   exec('git pull', { exit: false });
-  if (options.rebase) {
+  if (config.HOTFIX_CLOSE_REBASE_TO_LATEST_TAG) {
     revert('git rebase --abort');
-    const interactive = parseInt(exec(`git log --oneline refs/tags/${latestTag}..${branch}|grep fixup|wc -l`), 10) > 0;
+    const interactive =
+      config.MERGE_INTERACTIVE ||
+      parseInt(exec(`git log --oneline refs/tags/${latestTag}..${branch}|grep fixup|wc -l`), 10) > 0;
     await exec(`git rebase ${interactive ? '-i' : ''} refs/tags/${latestTag} ${interactive ? '--autosquash' : ''}`, {
       interactive,
       exit: false,
@@ -34,7 +36,7 @@ export default async function hotfixClose(branch, tag, options) {
 
   await createTag(tag, branch);
 
-  exec(`git checkout ${config.BASE_BRANCH}`);
+  exec(`git checkout ${getConfig().BASE_BRANCH}`);
   exec('git pull');
   revert(`git reset --hard HEAD`);
   await exec(`git merge refs/heads/${branch}`, {
@@ -42,6 +44,6 @@ export default async function hotfixClose(branch, tag, options) {
     recover: recover('Merge conflict exists. Please fix your conflicts.')
   });
 
-  await pushBranchToRemoteAndDelete(branch, options.forcePush);
+  await pushBranchToRemoteAndDelete(branch, config.PUSH_CHANGES_TO_REMOTE);
   console.log(chalk.blue(`closed hotfix ${branch} to ${config.BASE_BRANCH} creating tag ${tag}`));
 }

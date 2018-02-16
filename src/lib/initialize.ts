@@ -13,7 +13,7 @@ export default async function initialize() {
   console.log(chalk.magenta(`Welcome to ${packageJson.name}. Please follow the steps below to configure it!\n\n`));
 
   const answers = await inquirer.prompt(initializeConfig(sampleConfig));
-  Object.assign(config, answers, { initialized: true });
+  Object.assign(config, sampleConfig, answers, { initialized: true });
 
   config.save();
   console.log(chalk.magenta('Your ~/.oneflowrc file has been created! You are ready to use oneflow.'));

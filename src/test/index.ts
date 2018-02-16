@@ -10,6 +10,7 @@ tsConfigPaths.register({
   baseUrl,
   paths: tsConfig.compilerOptions.paths
 });
+(process.env as any).NODE_ENV = 'test';
 
 import exec from 'exec';
 
@@ -20,6 +21,22 @@ function createRepos() {
   exec(
     'cd example-repos && mkdir local && cd local && git init && git remote add origin ../remote' +
       '&& echo "test">init.txt && git add . && git commit -m "initial commit" && git push --set-upstream origin master'
+  );
+  exec(
+    `cd example-repos/local && echo "${`
+BASE_BRANCH=master
+CHANGE_VERSIONS_WHEN_TAGGING=true
+PUSH_CHANGES_TO_REMOTE=false
+HOTFIX_CLOSE_REBASE_TO_LATEST_TAG=true
+MERGE_FF=true
+MERGE_INTERACTIVE=false
+FEATURE_CLOSE_REWRITE_COMMITS=false
+RUN_CMD_AFTER_TAG_CREATION=
+FEATURE_CLOSE_SQUASH=false
+RELEASE_CLOSE_MERGE=true
+RELEASE_CREATE_AND_CLOSE=false
+RELEASE_CLOSE_MERGES_TO_BASE_BRANCH=true
+`}" >> .oneflowrc && git add . && git commit -m "Added configuration" && git push`
   );
 }
 

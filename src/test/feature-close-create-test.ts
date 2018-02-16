@@ -1,15 +1,15 @@
 describe('feature-create feature-close', function() {
   it('should create feature and push to remote', function() {
-    this.oneflow('feature-create test-branch -f')
+    this.oneflow('feature-create test-branch -p')
       .assertLocalContainsBranch('* test-branch')
       .assertRemoteContainsBranch('test-branch');
   });
 
   it('should create feature change message and then close it', function() {
-    this.oneflow('feature-create test2-branch -f').commit('1st commit');
+    this.oneflow('feature-create test2-branch -p').commit('1st commit');
     const { commitMsg } = this.getCommit();
     this.assertLocalContainsBranch('* test2-branch')
-      .oneflow('feature-close test2-branch -f -r')
+      .oneflow('feature-close test2-branch -p -r')
       .assertLocalContainsBranch('* master')
       .assertLocalDoesNotContainBranch('test2-branch')
       .assertRemoteDoesNotContainBranch('test2-branch');
@@ -18,10 +18,10 @@ describe('feature-create feature-close', function() {
   });
 
   it('should create feature and then close it', function() {
-    this.oneflow('feature-create test3-branch -f').commit('1st commit');
+    this.oneflow('feature-create test3-branch -p').commit('1st commit');
     const { commitMsg } = this.getCommit();
     this.assertLocalContainsBranch('* test3-branch')
-      .oneflow('feature-close test3-branch -f -R')
+      .oneflow('feature-close test3-branch -p -R')
       .assertLocalContainsBranch('* master')
       .assertLocalDoesNotContainBranch('test3-branch')
       .assertRemoteDoesNotContainBranch('test3-branch');
@@ -30,13 +30,13 @@ describe('feature-create feature-close', function() {
   });
 
   it('should create feature and then close it with squash', function() {
-    this.oneflow('feature-create test4-branch -f').commit('1st commit');
+    this.oneflow('feature-create test4-branch -p').commit('1st commit');
     const { commit, commitMsg } = this.getCommit();
     this.commit('2ond commit');
     const { commit: commit2, commitMsg: commitMsg2 } = this.getCommit();
 
     this.assertLocalContainsBranch('* test4-branch')
-      .oneflow('feature-close test4-branch -f -R -s')
+      .oneflow('feature-close test4-branch -p -R -s')
       .assertLocalContainsBranch('* master')
       .assertLocalDoesNotContainBranch('test4-branch')
       .assertRemoteDoesNotContainBranch('test4-branch');
@@ -46,11 +46,11 @@ describe('feature-create feature-close', function() {
     );
   });
 
-  it('should create feature and then close it with no-ff', function() {
-    this.oneflow('feature-create test4-branch -f').commit('1st commit');
+  it('should create feature and then close it with no-ff-flag', function() {
+    this.oneflow('feature-create test4-branch -p').commit('1st commit');
     const { commitMsg } = this.getCommit();
     this.assertLocalContainsBranch('* test4-branch')
-      .oneflow('feature-close test4-branch -f -r -n')
+      .oneflow('feature-close test4-branch -p -r -F')
       .assertLocalContainsBranch('* master')
       .assertLocalDoesNotContainBranch('test4-branch')
       .assertRemoteDoesNotContainBranch('test4-branch');

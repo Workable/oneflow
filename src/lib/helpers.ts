@@ -4,25 +4,31 @@ import { branchName, confirm, tagName } from './questions';
 import * as chalk from 'chalk';
 import * as fs from 'fs';
 import * as semver from 'semver';
-import * as homeConfig from 'home-config';
 import * as moment from 'moment';
-const config = homeConfig.load('.oneflowrc');
+import { getConfig, save } from './config';
+import initialize from './initialize';
 const packageJson = require('../../package.json');
 
 export async function hasVersionChanged() {
-  if (!config.GET_VERSION || (!!config.LAST_CHECKED && moment().isBefore(moment(config.LAST_CHECKED).add(1, 'day')))) {
+  if (
+    !getConfig().GET_VERSION ||
+    (!!getConfig().LAST_CHECKED && moment().isBefore(moment(getConfig().LAST_CHECKED).add(1, 'day')))
+  ) {
     return;
   }
   const currentVersion = packageJson.version;
-  const upstreamVersion = exec(config.GET_VERSION, { log: false });
+  const upstreamVersion = exec(getConfig().GET_VERSION, { log: false });
   if (semver.gt(upstreamVersion, currentVersion)) {
     console.log('New version exists...');
     if (await prompt(`Update to latest version ${upstreamVersion}`)) {
       exec('npm install -g https://github.com/Workable/oneflow#master', { interactive: true });
     }
+    if (semver.gte(upstreamVersion, '1.0.0')) {
+      initialize();
+    }
+    process.exit(0);
   }
-  config.LAST_CHECKED = new Date().toISOString();
-  config.save();
+  save({ LAST_CHECKED: new Date().toISOString() });
 }
 
 function getCurrentCommit() {
@@ -36,14 +42,7 @@ export function revertBranch(branch) {
 export async function merge(
   from,
   to,
-  {
-    noff = config.NO_FF,
-    enforceFF = true,
-    rebase = false,
-    rewriteCommits = false,
-    interactive = false,
-    squash = false
-  } = {}
+  { noff = false, enforceFF = true, rebase = false, rewriteCommits = false, interactive = false, squash = false } = {}
 ) {
   exec('git fetch origin --tags --prune');
   exec(`git checkout ${to}`);
@@ -98,7 +97,7 @@ export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?
 export async function pushBranchToRemoteAndDelete(branch, shouldPush?) {
   if (shouldPush || (await prompt('Force push changes to remote?'))) {
     exec(`git push origin refs/heads/${branch}:refs/heads/${branch} --force-with-lease`); // push branch changes
-    await exec(`git push --tags origin ${config.BASE_BRANCH}`, {
+    await exec(`git push --tags origin ${getConfig().BASE_BRANCH}`, {
       exit: false,
       recover: recover(
         'Could not push to remote.',
@@ -111,7 +110,7 @@ export async function pushBranchToRemoteAndDelete(branch, shouldPush?) {
     console.log(`Please run: ${chalk.red(
       `git push origin refs/heads/${branch}:refs/heads/${branch} --force-with-lease`
     )}
-Please run: ${chalk.red(`git push --tags origin ${config.BASE_BRANCH}`)}
+Please run: ${chalk.red(`git push --tags origin ${getConfig().BASE_BRANCH}`)}
 Please run: ${chalk.red(`git branch -d ${branch} && git push origin :refs/heads/${branch}`)}`);
   }
 }
@@ -144,9 +143,9 @@ export async function getTagPrompt(tag, msg, nextRelease?) {
 
 export function createTag(tag, branch) {
   revertBranch(branch);
-  if (config.CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('package.json')) {
+  if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('package.json')) {
     exec(`npm version ${tag}`);
-  } else if (config.CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
+  } else if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
     exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${tag} && git commit -am "[oneflow] ${tag}"`);
     exec(`git tag ${tag}`);
     const nextVersion = `${semver.inc(tag, 'minor')}-SNAPSHOT`;
@@ -158,8 +157,13 @@ export function createTag(tag, branch) {
     exec(`git tag ${tag}`);
   }
   revert(`git tag -d ${tag}`);
-  config.RUN_CMD_AFTER_TAG_CREATION &&
-    exec(config.RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag).replace('${branch}', branch), { interactive: true });
+  getConfig().RUN_CMD_AFTER_TAG_CREATION &&
+    exec(
+      getConfig()
+        .RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag)
+        .replace('${branch}', branch),
+      { interactive: true }
+    );
 }
 
 export async function prompt(msg): Promise<boolean> {

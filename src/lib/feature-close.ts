@@ -1,24 +1,28 @@
 import * as chalk from 'chalk';
 import { getBranchPrompt, merge, pushBranchToRemoteAndDelete } from './helpers';
-import * as homeConfig from 'home-config';
-const config = homeConfig.load('.oneflowrc');
-
-function useDefault(d, value = d) {
-  return value;
-}
+import { getConfig } from './config';
 
 export default async function featureClose(branch, options) {
   branch = await getBranchPrompt(branch);
 
-  await merge(branch, config.BASE_BRANCH, {
-    noff: !options.ff || config.NO_FF,
+  const {
+    BASE_BRANCH,
+    MERGE_FF,
+    FEATURE_CLOSE_REWRITE_COMMITS,
+    MERGE_INTERACTIVE,
+    FEATURE_CLOSE_SQUASH,
+    PUSH_CHANGES_TO_REMOTE
+  } = getConfig(options);
+
+  await merge(branch, BASE_BRANCH, {
+    noff: !MERGE_FF,
     rebase: true,
-    rewriteCommits: useDefault(options.rewriteHistory && config.REWRITE_COMMITS, options.rewrite),
-    interactive: options.interactive,
-    squash: options.squash
+    rewriteCommits: FEATURE_CLOSE_REWRITE_COMMITS,
+    interactive: MERGE_INTERACTIVE,
+    squash: FEATURE_CLOSE_SQUASH
   });
 
-  await pushBranchToRemoteAndDelete(branch, options.forcePush);
+  await pushBranchToRemoteAndDelete(branch, PUSH_CHANGES_TO_REMOTE);
 
-  console.log(chalk.blue(`closed feature ${branch} to ${config.BASE_BRANCH}`));
+  console.log(chalk.blue(`closed feature ${branch} to ${getConfig().BASE_BRANCH}`));
 }

@@ -2,14 +2,16 @@ import exec from './exec';
 import * as chalk from 'chalk';
 import { getBranchPrompt, getTagPrompt, getCurrentBranch, pushToRemote } from './helpers';
 import * as semver from 'semver';
+import { getConfig } from './config';
 
 export default async function hotfixCreate(branch, tag, options) {
+  const config = getConfig(options);
   exec('git fetch origin --tags --prune');
   tag = await getTagPrompt(tag, 'checkout tag?');
   branch = await getBranchPrompt(branch, semver.inc(tag, 'patch'));
 
   exec(`git checkout -b ${branch} refs/tags/${tag}`);
-  await pushToRemote(options.forcePush, false, branch);
+  await pushToRemote(config.PUSH_CHANGES_TO_REMOTE, false, branch);
 
   console.log(chalk.blue(`currently in branch ${getCurrentBranch()}`));
 }
