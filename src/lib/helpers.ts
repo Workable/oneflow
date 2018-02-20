@@ -95,13 +95,14 @@ export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?
 }
 
 export async function pushBranchToRemoteAndDelete(branch, shouldPush?) {
-  if (shouldPush || (await prompt('Force push changes to remote?'))) {
+  if (shouldPush || (await prompt('Push changes to remote and delete branch?'))) {
     exec(`git push origin refs/heads/${branch}:refs/heads/${branch} --force-with-lease`); // push branch changes
     await exec(`git push --tags origin ${getConfig().BASE_BRANCH}`, {
       exit: false,
       recover: recover(
         'Could not push to remote.',
-        "Press Y to retry or N to revert. Note that remote won't be reverted"
+        "Press Y to retry or N to revert. Note that remote won't be reverted",
+        true
       )
     });
     exec(`git branch -d ${branch} && git push origin :refs/heads/${branch}`);
@@ -174,12 +175,17 @@ export function getReleaseName(tag) {
   return `release-${tag}`;
 }
 
-export function recover(msg, then = 'Then press y to continue') {
+export function recover(msg, then = 'Then press y to continue', optionalRevert = false) {
   return async () => {
     if (await prompt(`${msg}\n ${then}`)) {
       console.log(chalk.magenta('continuing'));
-    } else {
+    } else if (
+      !optionalRevert ||
+      prompt(`Revert local changes? This is not a good idea if changes are already pushed in remote.`)
+    ) {
       runRevert();
+      process.exit(1);
+    } else {
       process.exit(1);
     }
   };
