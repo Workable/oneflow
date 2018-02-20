@@ -22,7 +22,16 @@ export default async function featureClose(branch, options) {
     squash: FEATURE_CLOSE_SQUASH
   });
 
-  await pushBranchToRemoteAndDelete(branch, PUSH_CHANGES_TO_REMOTE);
+  const pushed = await pushBranchToRemoteAndDelete(branch, PUSH_CHANGES_TO_REMOTE);
 
-  console.log(chalk.blue(`closed feature ${branch} to ${getConfig().BASE_BRANCH}`));
+  console.log(
+    chalk.blue(`Switched to branch ${getConfig().BASE_BRANCH}
+
+Summary of actions:
+ - Latest changes were fetched from remote
+ - Branch ${branch} was merged into ${getConfig().BASE_BRANCH}
+ ${pushed ? `- Branch ${branch} was deleted and changes were pushed to remote` : ''}
+ - You are now on branch ${getConfig().BASE_BRANCH}
+  `)
+  );
 }

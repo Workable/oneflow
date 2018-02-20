@@ -13,5 +13,18 @@ export default async function hotfixCreate(branch, tag, options) {
   exec(`git checkout -b ${branch} refs/tags/${tag}`);
   await pushToRemote(config.PUSH_CHANGES_TO_REMOTE, false, branch);
 
-  console.log(chalk.blue(`currently in branch ${getCurrentBranch()}`));
+  console.log(
+    chalk.blue(`Switched to a new branch ${getCurrentBranch()}
+
+Summary of actions:
+ - A new branch ${getCurrentBranch()} was created base on tag ${tag}
+ - You are now on branch ${getCurrentBranch()}
+
+ Now, start committing on your hotfix. When done, use:
+
+   oneflow hotfix-close ${getCurrentBranch()}
+
+This will handle version changes (for node, java sourcecoeds) and tag creation.
+  `)
+  );
 }

@@ -44,6 +44,17 @@ export default async function hotfixClose(branch, tag, options) {
     recover: recover('Merge conflict exists. Please fix your conflicts.')
   });
 
-  await pushBranchToRemoteAndDelete(branch, config.PUSH_CHANGES_TO_REMOTE);
-  console.log(chalk.blue(`closed hotfix ${branch} to ${config.BASE_BRANCH} creating tag ${tag}`));
+  const pushed = await pushBranchToRemoteAndDelete(branch, config.PUSH_CHANGES_TO_REMOTE);
+  console.log(
+    chalk.blue(`Switched to branch ${config.BASE_BRANCH}
+
+Summary of actions:
+ - Latest changes were fetched from remote
+${config.HOTFIX_CLOSE_REBASE_TO_LATEST_TAG ? `- rebased hotfix to latest tag ${latestTag}` : ''}
+- Hotfix was tagged '${tag}'
+- Hotfix branch ${branch} was merged into ${getConfig().BASE_BRANCH}
+${pushed ? `- Branch ${branch} was deleted and changes were pushed to remote` : ''}
+- You are now on branch ${getConfig().BASE_BRANCH}
+  `)
+  );
 }

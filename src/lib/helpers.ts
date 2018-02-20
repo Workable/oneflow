@@ -133,7 +133,7 @@ export async function getTagPrompt(tag, msg, nextRelease?) {
     const latestTagCommit = exec('git rev-list --tags --max-count=1', { log: false });
     const latestTag = await exec(`git describe --tags ${latestTagCommit}`, { log: false });
     if (nextRelease) {
-      tag = (latestTag.startsWith('v') ? 'v' : '') + semver.inc(latestTag, nextRelease);
+      tag = (latestTag && latestTag.startsWith('v') ? 'v' : '') + semver.inc(latestTag, nextRelease);
     } else {
       tag = latestTag;
     }

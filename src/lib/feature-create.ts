@@ -16,5 +16,21 @@ export default async function featureCreate(branch, options) {
   exec(`git checkout -b ${branch};`);
   revert(`git checkout ${base} && git branch -d ${branch}`);
   await pushToRemote(PUSH_CHANGES_TO_REMOTE, false, branch);
-  console.log(chalk.blue(`currently in branch ${getCurrentBranch()}`));
+
+  if (options.log === false) {
+    return;
+  }
+
+  console.log(
+    chalk.blue(`Switched to a new branch ${getCurrentBranch()}
+
+Summary of actions:
+ - A new branch '${getCurrentBranch()}' was created, based on '${base}'
+ - You are now on branch '${getCurrentBranch()}'
+
+Now, start committing on your feature. When done, use:
+
+  oneflow feature-close ${getCurrentBranch()}
+  `)
+  );
 }
