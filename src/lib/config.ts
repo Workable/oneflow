@@ -2,7 +2,7 @@ import * as homeConfig from 'home-config';
 import * as path from 'path';
 const packageJson = require('../../package.json');
 
-const configName = `.${packageJson.name}rc`;
+export const configName = `.${packageJson.name}rc`;
 const config = homeConfig.load(configName);
 const localConfig = homeConfig.load(path.resolve(process.cwd(), configName));
 

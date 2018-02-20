@@ -88,6 +88,7 @@ program
 
 program
   .command('configure')
+  .addOption('local', 'Configures local project')
   .description('Runs the initialize wizard')
   .action(wrap(initialize));
 

@@ -49,7 +49,7 @@ export default async function hotfixClose(branch, tag, options) {
     chalk.blue(`Switched to branch ${config.BASE_BRANCH}
 
 Summary of actions:
- - Latest changes were fetched from remote
+- Latest changes were fetched from remote
 ${config.HOTFIX_CLOSE_REBASE_TO_LATEST_TAG ? `- rebased hotfix to latest tag ${latestTag}` : ''}
 - Hotfix was tagged '${tag}'
 - Hotfix branch ${branch} was merged into ${getConfig().BASE_BRANCH}

@@ -3,11 +3,16 @@ import * as inquirer from 'inquirer';
 import * as chalk from 'chalk';
 import * as figlet from 'figlet';
 import * as homeConfig from 'home-config';
-const config = homeConfig.load('.oneflowrc');
+let config = homeConfig.load('.oneflowrc');
 const packageJson = require('../../package.json');
+import { resolvePath, configName } from './config';
 
-export default async function initialize() {
+export default async function initialize(options = {} as any) {
   const sampleConfig = require('../../config.sample.json');
+  if (options.local) {
+    Object.assign(sampleConfig, config);
+    config = homeConfig.load(resolvePath(configName));
+  }
   Object.assign(sampleConfig, config);
   console.log(chalk.yellow(figlet.textSync(packageJson.name, { horizontalLayout: 'full' })));
   console.log(chalk.magenta(`Welcome to ${packageJson.name}. Please follow the steps below to configure it!\n\n`));
