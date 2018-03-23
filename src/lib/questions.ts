@@ -70,7 +70,7 @@ export const initializeConfig = config => [
   {
     name: 'HOTFIX_CLOSE_REBASE_TO_LATEST_TAG',
     type: 'input',
-    message: 'Rebase branch to latest tag during feature-close?',
+    message: 'Rebase branch to latest tag during hotfix-close?',
     default: config.HOTFIX_CLOSE_REBASE_TO_LATEST_TAG
   },
   {
