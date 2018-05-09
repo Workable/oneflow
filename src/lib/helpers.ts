@@ -21,7 +21,7 @@ export async function hasVersionChanged() {
   if (semver.gt(upstreamVersion, currentVersion)) {
     console.log('New version exists...');
     if (await prompt(`Update to latest version ${upstreamVersion}`)) {
-      exec('npm install -g https://github.com/Workable/oneflow#master', { interactive: true });
+      exec('npm install -g git+ssh://git@github.com/Workable/oneflow.git#master', { interactive: true });
     }
     if (semver.gte(upstreamVersion, '1.0.0')) {
       initialize();
