@@ -70,18 +70,22 @@ export async function merge(
       exec(`git filter-branch -f --msg-filter 'sed 1s/^${from}\\:\\ // | sed 1s/^/${from}\\:\\ /' ${to}..${from}`);
     }
   }
+
+  if (squash) {
+    const commit = exec(`git log --pretty=format:"%H" -1 ${from}`);
+    const msg = `${from}\n\n${exec(`git log --oneline ${to}..${from}`)}`;
+    exec(`git reset --hard ${to}`);
+    exec(`git merge ${commit} --squash`);
+    await exec(`git commit -m "${msg}"`);
+  }
+
   exec(`git checkout ${to}`);
   revert('git reset --hard HEAD');
 
-  await exec(`git merge ${from} ${noff ? '--no-ff' : enforceFF ? '--ff-only' : ''} ${squash ? '--squash' : ''}`, {
+  await exec(`git merge ${from} ${noff ? '--no-ff' : enforceFF ? '--ff-only' : ''}`, {
     exit: false,
     recover: recover('Merge conflict exists. Please fix manually')
   });
-
-  if (squash) {
-    const msg = `${from}\n\n${exec(`git log --oneline ${to}..${from}`)}`;
-    await exec(`git commit -m "${msg}"`);
-  }
 }
 
 export async function pushToRemote(shouldPush?, tags = false, setUpstreamBranch?) {

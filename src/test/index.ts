@@ -33,7 +33,6 @@ MERGE_INTERACTIVE=false
 FEATURE_CLOSE_REWRITE_COMMITS=false
 RUN_CMD_AFTER_TAG_CREATION=
 FEATURE_CLOSE_SQUASH=false
-RELEASE_CLOSE_MERGE=true
 RELEASE_CREATE_AND_CLOSE=false
 RELEASE_CLOSE_MERGES_TO_BASE_BRANCH=true
 `}" >> .oneflowrc && git add . && git commit -m "Added configuration" && git push`
