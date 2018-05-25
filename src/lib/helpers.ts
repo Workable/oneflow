@@ -23,10 +23,6 @@ export async function hasVersionChanged() {
     if (await prompt(`Update to latest version ${upstreamVersion}`)) {
       exec('npm install -g git+ssh://git@github.com/Workable/oneflow.git#master', { interactive: true });
     }
-    if (semver.gte(upstreamVersion, '1.0.0')) {
-      initialize();
-    }
-    process.exit(0);
   }
   save({ LAST_CHECKED: new Date().toISOString() });
 }
