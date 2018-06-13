@@ -145,7 +145,11 @@ export function createTag(tag, branch) {
   revertBranch(branch);
   if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('package.json')) {
     exec(`npm version ${tag}`);
-  } else if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
+  } else if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('VERSION')) {
+    exec(`echo "${tag}" > VERSION && git commit -am "[oneflow] ${tag}`);
+    exec(`git tag ${tag}`);
+  }
+    else if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
     exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${tag} && git commit -am "[oneflow] ${tag}"`);
     exec(`git tag ${tag}`);
     const nextVersion = `${semver.inc(tag, 'minor')}-SNAPSHOT`;
