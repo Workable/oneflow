@@ -29,7 +29,7 @@ Summary of actions:
 
 Now, start committing on your release. When done, use:
 
-  oneflow release-close ${getCurrentBranch()}
+  oneflow release-close ${tag}
     `)
     );
   }
