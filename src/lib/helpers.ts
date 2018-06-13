@@ -6,7 +6,6 @@ import * as fs from 'fs';
 import * as semver from 'semver';
 import * as moment from 'moment';
 import { getConfig, save } from './config';
-import initialize from './initialize';
 const packageJson = require('../../package.json');
 
 export async function hasVersionChanged() {

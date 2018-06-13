@@ -15,7 +15,6 @@ export default async function releaseClose(tag, options) {
   }
   await merge(releaseName, config.BASE_BRANCH, { enforceFF: false });
 
-  console.log(config.PUSH_CHANGES_TO_REMOTE);
   const pushed = await pushBranchToRemoteAndDelete(releaseName, config.PUSH_CHANGES_TO_REMOTE);
 
   console.log(chalk.blue(`${config.BASE_BRANCH} is on tag ${tag}`));
