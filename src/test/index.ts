@@ -94,10 +94,14 @@ before(function() {
     this.assertLocal(`git branch | grep "${branch}"| wc -l`, '0', `local still contains branch ${branch}`);
 
   this.assertLocalCommitMsg = (msg, num = 0) =>
-    this.assertLocal(`git log --pretty=format:"%s" ${num - 1} | tail -1`, msg, `commit msg does not match with ${msg}`);
+    this.assertLocal(`git log --pretty=format:"%s" ${num - 1} --date-order | tail -1`, msg, `commit msg does not match with ${msg}`);
 
   this.assertLocalCommitMultiLineMsg = (msg, num = 0) =>
-    this.assertLocal(`git log --pretty=format:"%B" ${num - 1} `, msg, `commit msg does not match with ${msg}`);
+    this.assertLocal(
+      `git log --pretty=format:"%B" ${num - 1} --date-order`,
+      msg,
+      `commit msg does not match with ${msg}`
+    );
 
   this.checkout = branch => this.local(`git checkout ${branch}`);
   this.tag = tag => this.local(`git tag ${tag}`);
