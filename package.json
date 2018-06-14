@@ -1,5 +1,5 @@
 {
-  "name": "one-flow",
+  "name": "@workablehr/oneflow",
   "version": "1.2.0",
   "description": "OneFlow cli tool",
   "main": "build/lib/index.js",
@@ -20,8 +20,7 @@
     "node": ">= 6.0.0"
   },
   "bin": {
-    "oneflow": "bin/oneflow",
-    "one-flow": "bin/oneflow"
+    "oneflow": "bin/oneflow"
   },
   "author": "Nikos Kostoulas <nikostoulas@gmail.com>",
   "license": "MIT",

@@ -4,7 +4,7 @@ CLI tool to support Adam Ruka's branching model [oneflow](http://endoflineblog.c
 
 ## Installing one-flow
 
-1.  Run `npm install -g one-flow`
+1.  Run `npm install -g @workablehr/oneflow`
 
 ## Initialization
 
