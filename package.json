@@ -1,9 +1,9 @@
 {
-  "name": "oneflow",
+  "name": "one-flow",
   "version": "1.2.0",
   "description": "OneFlow cli tool",
-  "private": true,
   "main": "build/lib/index.js",
+  "repository": "Workable/oneflow",
   "scripts": {
     "clean": "rm -rf ./build",
     "prebuild": "npm run clean",
@@ -11,24 +11,24 @@
     "prewatch": "npm run clean",
     "watch": "tsc -w -p .",
     "prepublishOnly": "npm test",
-    "install": "npm run build",
     "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
     "pretest": "npm run lint && npm run build",
     "test": "istanbul test _mocha build/test/index build/test -- --recursive -R spec --timeout 10000",
     "posttest": "remap-istanbul -i coverage/coverage.json -o coverage/lcov-report -t html"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 6.0.0"
   },
   "bin": {
-    "oneflow": "bin/oneflow"
+    "oneflow": "bin/oneflow",
+    "one-flow": "bin/oneflow"
   },
   "author": "Nikos Kostoulas <nikostoulas@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@types/mocha": "^2.2.41",
     "@types/chalk": "^0.4.31",
     "@types/inquirer": "0.0.35",
+    "@types/mocha": "^2.2.41",
     "@types/node": "^9.4.6",
     "@types/should": "^8.3.0",
     "@types/source-map-support": "^0.4.0",
@@ -38,14 +38,14 @@
     "figlet": "1.2.0",
     "home-config": "^0.1.0",
     "inquirer": "3.0.5",
-    "moment": "2.17.1",
+    "moment": "^2.22.2",
     "semver": "^5.3.0",
-    "typescript": "^2.5.2",
-    "tsconfig-paths": "^2.3.0"
+    "tsconfig-paths": "^2.3.0",
+    "typescript": "^2.5.2"
   },
   "devDependencies": {
     "istanbul": "^0.4.5",
-    "mocha": "^3.4.2",
+    "mocha": "^5.2.0",
     "remap-istanbul": "^0.9.5",
     "should": "^11.2.1",
     "source-map-support": "^0.4.15",

@@ -2,7 +2,7 @@
   "BASE_BRANCH": "master",
   "RUN_CMD_AFTER_TAG_CREATION": "",
   "CHANGE_VERSIONS_WHEN_TAGGING": true,
-  "GET_VERSION": "",
+  "GET_VERSION": "npm view one-flow version",
   "PUSH_CHANGES_TO_REMOTE": true,
   "HOTFIX_CLOSE_REBASE_TO_LATEST_TAG": true,
   "MERGE_FF": true,

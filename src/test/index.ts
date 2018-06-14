@@ -35,6 +35,7 @@ RUN_CMD_AFTER_TAG_CREATION=
 FEATURE_CLOSE_SQUASH=false
 RELEASE_CREATE_AND_CLOSE=false
 RELEASE_CLOSE_MERGES_TO_BASE_BRANCH=true
+initialized=true
 `}" >> .oneflowrc && git add . && git commit -m "Added configuration" && git push`
   );
 }

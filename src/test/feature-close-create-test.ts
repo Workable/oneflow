@@ -47,15 +47,15 @@ describe('feature-create feature-close', function() {
   });
 
   it('should create feature and then close it with no-ff-flag', function() {
-    this.oneflow('feature-create test4-branch -p').commit('1st commit');
+    this.oneflow('feature-create test5-branch -p').commit('1st commit');
     const { commitMsg } = this.getCommit();
-    this.assertLocalContainsBranch('* test4-branch')
-      .oneflow('feature-close test4-branch -p -r -F')
+    this.assertLocalContainsBranch('* test5-branch')
+      .oneflow('feature-close test5-branch -p -r -F')
       .assertLocalContainsBranch('* master')
-      .assertLocalDoesNotContainBranch('test4-branch')
-      .assertRemoteDoesNotContainBranch('test4-branch');
+      .assertLocalDoesNotContainBranch('test5-branch')
+      .assertRemoteDoesNotContainBranch('test5-branch');
 
-    this.assertLocalCommitMsg("Merge branch 'test4-branch'");
-    this.assertLocalCommitMsg(`test4-branch: ${commitMsg}`, -1);
+    this.assertLocalCommitMsg("Merge branch 'test5-branch'");
+    this.assertLocalCommitMsg(`test5-branch: ${commitMsg}`, -1);
   });
 });

@@ -93,7 +93,7 @@ function init() {
     .description('Runs the initialize wizard')
     .action(wrap(initialize));
 
-  taptapCommander.init(program, packageJson.name);
+  taptapCommander.init(program, process.argv[1].split('/').pop());
   program.version(packageJson.version).parse(process.argv);
 }
 

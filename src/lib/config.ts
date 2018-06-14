@@ -2,7 +2,7 @@ import * as homeConfig from 'home-config';
 import * as path from 'path';
 const packageJson = require('../../package.json');
 
-export const configName = `.${packageJson.name}rc`;
+export const configName = `.${packageJson.name.replace('-', '')}rc`;
 const config = homeConfig.load(configName);
 const localConfig = homeConfig.load(path.resolve(process.cwd(), configName));
 
@@ -33,7 +33,7 @@ export function getProjectConfig(argOptions) {
   return { ...localConfig, ...configFromArgs };
 }
 
-export declare type config = {
+export declare type CONFIG = {
   PUSH_CHANGES_TO_REMOTE: boolean;
   HOTFIX_CLOSE_REBASE_TO_LATEST_TAG: boolean;
   MERGE_INTERACTIVE: boolean;
@@ -51,7 +51,7 @@ export declare type config = {
   initialized: boolean;
 };
 
-export function getConfig(argOptions = {}): config {
+export function getConfig(argOptions = {}): CONFIG {
   return { ...config, ...getProjectConfig(argOptions) };
 }
 
