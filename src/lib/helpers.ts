@@ -20,7 +20,7 @@ export async function hasVersionChanged() {
   if (semver.gt(upstreamVersion, currentVersion)) {
     console.log('New version exists...');
     if (await prompt(`Update to latest version ${upstreamVersion}`)) {
-      exec('npm install -g git+ssh://git@github.com/Workable/oneflow.git#master', { interactive: true });
+      exec('npm install -g @workablehr/oneflow', { interactive: true });
     }
   }
   save({ LAST_CHECKED: new Date().toISOString() });
