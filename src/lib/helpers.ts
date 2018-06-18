@@ -143,22 +143,32 @@ export async function getTagPrompt(tag, msg, nextRelease?) {
 
 export function createTag(tag, branch) {
   revertBranch(branch);
-  if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('package.json')) {
-    exec(`npm version ${tag}`);
-  } else if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('VERSION')) {
-    exec(`echo "${tag}" > VERSION && git commit -am "[oneflow] ${tag}`);
-    exec(`git tag ${tag}`);
-  } else if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
-    exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${tag} && git commit -am "[oneflow] ${tag}"`);
-    exec(`git tag ${tag}`);
-    const nextVersion = `${semver.inc(tag, 'minor')}-SNAPSHOT`;
-    exec(
-      `mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${nextVersion} \
-       && git commit -am "[oneflow] prepare for next development iteration ${nextVersion}"`
-    );
-  } else {
-    exec(`git tag ${tag}`);
+  if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING) {
+    let commitMessage = tag;
+    let versionBumped = false;
+    if (fs.existsSync('package.json')) {
+      exec(`npm version ${tag} --no-git-tag-version`);
+      versionBumped = true;
+    }
+    if (fs.existsSync('VERSION')) {
+      exec(`echo "${tag}" > VERSION`);
+      versionBumped = true;
+    }
+    if (fs.existsSync('pom.xml')) {
+      exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${tag}"`);
+      const nextVersion = `${semver.inc(tag, 'minor')}-SNAPSHOT`;
+      exec(
+        `mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${nextVersion}`
+      );
+      commitMessage = `prepare for next development iteration ${nextVersion}`;
+      versionBumped = true;
+    }
+
+    if (versionBumped) {
+      exec(`git commit -am "[oneflow] ${commitMessage}"`);
+    }
   }
+  exec(`git tag ${tag}`);
   revert(`git tag -d ${tag}`);
   getConfig().RUN_CMD_AFTER_TAG_CREATION &&
     exec(
