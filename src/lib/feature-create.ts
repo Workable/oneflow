@@ -26,6 +26,7 @@ export default async function featureCreate(branch, options) {
 
 Summary of actions:
  - A new branch '${getCurrentBranch()}' was created, based on '${base}'
+ - The new branch was pushed to remote origin/${getCurrentBranch()}
  - You are now on branch '${getCurrentBranch()}'
 
 Now, start committing on your feature. When done, use:
