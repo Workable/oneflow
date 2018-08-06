@@ -18,6 +18,7 @@ export default async function hotfixCreate(branch, tag, options) {
 
 Summary of actions:
  - A new branch ${getCurrentBranch()} was created base on tag ${tag}
+ - The new branch was pushed to remote origin/${getCurrentBranch()}
  - You are now on branch ${getCurrentBranch()}
 
  Now, start committing on your hotfix. When done, use:
