@@ -113,6 +113,10 @@ function init() {
 
   taptapCommander.init(program, process.argv[1].split('/').pop());
   program.version(packageJson.version).parse(process.argv);
+
+  if (program.args.length === 0) {
+    program.help();
+  }
 }
 
 init();
