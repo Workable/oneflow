@@ -155,7 +155,7 @@ export function createTag(tag, branch) {
       versionBumped = true;
     }
     if (fs.existsSync('pom.xml')) {
-      exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${tag}"`);
+      exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${tag}`);
       const nextVersion = `${semver.inc(tag, 'minor')}-SNAPSHOT`;
       exec(
         `mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${nextVersion}`
