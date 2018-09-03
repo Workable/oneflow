@@ -1,6 +1,6 @@
 {
   "name": "@workablehr/oneflow",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "OneFlow cli tool",
   "main": "build/lib/index.js",
   "repository": "Workable/oneflow",
