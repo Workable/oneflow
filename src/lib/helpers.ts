@@ -156,11 +156,6 @@ export function createTag(tag, branch) {
     }
     if (fs.existsSync('pom.xml')) {
       exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${tag}`);
-      const nextVersion = `${semver.inc(tag, 'minor')}-SNAPSHOT`;
-      exec(
-        `mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${nextVersion}`
-      );
-      commitMessage = `prepare for next development iteration ${nextVersion}`;
       versionBumped = true;
     }
 
@@ -170,6 +165,14 @@ export function createTag(tag, branch) {
   }
   exec(`git tag ${tag}`);
   revert(`git tag -d ${tag}`);
+
+  if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
+    const nextVersion = `${semver.inc(tag, 'minor')}-SNAPSHOT`;
+    exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${nextVersion}`);
+    const commitMessage = `prepare for next development iteration ${nextVersion}`;
+    exec(`git commit -am "[oneflow] ${commitMessage}"`);
+  }
+
   getConfig().RUN_CMD_AFTER_TAG_CREATION &&
     exec(
       getConfig()

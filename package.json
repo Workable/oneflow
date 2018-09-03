@@ -13,7 +13,7 @@
     "prepublishOnly": "npm test",
     "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
     "pretest": "npm run lint && npm run build",
-    "test": "istanbul test _mocha build/test/index build/test -- --recursive -R spec --timeout 10000",
+    "test": "istanbul test _mocha build/test/index build/test -- --recursive -R spec --timeout 30000",
     "posttest": "remap-istanbul -i coverage/coverage.json -o coverage/lcov-report -t html"
   },
   "engines": {

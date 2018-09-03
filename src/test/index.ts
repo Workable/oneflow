@@ -51,6 +51,11 @@ before(function() {
     return exec(`cd example-repos/remote && ${cmd}`);
   };
 
+  this.exec = cmd => {
+    exec(cmd);
+    return this;
+  };
+
   this.local = cmd => {
     this.runLocal(cmd);
     return this;
@@ -94,7 +99,11 @@ before(function() {
     this.assertLocal(`git branch | grep "${branch}"| wc -l`, '0', `local still contains branch ${branch}`);
 
   this.assertLocalCommitMsg = (msg, num = 0) =>
-    this.assertLocal(`git log --pretty=format:"%s" ${num - 1} --date-order | tail -1`, msg, `commit msg does not match with ${msg}`);
+    this.assertLocal(
+      `git log --pretty=format:"%s" ${num - 1} --date-order | tail -1`,
+      msg,
+      `commit msg does not match with ${msg}`
+    );
 
   this.assertLocalCommitMultiLineMsg = (msg, num = 0) =>
     this.assertLocal(

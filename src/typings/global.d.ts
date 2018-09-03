@@ -13,5 +13,7 @@ declare namespace Mocha {
     getCommit(branch?: string): { commitMsg: string; commit: string };
     checkout(branch: string): this;
     tag(tag: string): this;
+    exec(cmd: string): this;
+    local(cmd: string): this;
   }
 }
