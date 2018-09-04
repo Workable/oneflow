@@ -81,7 +81,7 @@ Available options:
 - To create a [hotfix branch](http://endoflineblog.com/oneflow-a-git-branching-model-and-workflow#hotfix-branches), use:
 
 ```
-hotfix-create [options] [hotfix-name] [base-tag]
+oneflow hotfix-create [options] [hotfix-name] [base-tag]
 ```
 
 This command will create locally a hotfix branch from the provided tag. `one-flow` will find and propose the latest tag if no other is provided.
@@ -96,7 +96,7 @@ Available options:
 - To close a hotfix branch use:
 
 ```
-hotfix-close [options] [hotfix-name] [tag]
+oneflow hotfix-close [options] [hotfix-name] [tag]
 ```
 
 This command will close a hotfix branch to master creating a tag
@@ -117,7 +117,7 @@ Available options:
 - To create a [release branch](http://endoflineblog.com/oneflow-a-git-branching-model-and-workflow#release-branches), use:
 
 ```
-release-create [options] [commit] [tag]
+oneflow release-create [options] [commit] [tag]
 ```
 
 This command will create a release branch from a specific commit or from master if no commit is provided
@@ -134,7 +134,7 @@ Available options:
 - To close a release branch use:
 
 ```
-release-close [options] [tag]
+oneflow release-close [options] [tag]
 ```
 
 This command will tag and merge a release branch to master
