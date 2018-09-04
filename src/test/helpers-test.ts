@@ -3,6 +3,7 @@ describe('helpers', function() {
     let commit;
     before(function() {
       ({ commit } = this.getCommit('master'));
+      this.tag('0.0.1');
     });
 
     after(function() {
