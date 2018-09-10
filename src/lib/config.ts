@@ -49,6 +49,8 @@ export declare type CONFIG = {
   GET_VERSION: string;
   LAST_CHECKED: Date;
   initialized: boolean;
+  BUGFIX_PREFIX: string;
+  FEATURE_PREFIX: string;
 };
 
 export function getConfig(argOptions = {}): CONFIG {

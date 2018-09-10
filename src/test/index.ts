@@ -36,6 +36,7 @@ FEATURE_CLOSE_SQUASH=false
 RELEASE_CREATE_AND_CLOSE=false
 RELEASE_CLOSE_MERGES_TO_BASE_BRANCH=true
 initialized=true
+BUGFIX_PREFIX=prefix
 `}" >> .oneflowrc && git add . && git commit -m "Added configuration" && git push`
   );
 }

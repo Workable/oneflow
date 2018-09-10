@@ -50,21 +50,23 @@ function init() {
     .addOption('push', 'Pushes local changes to remote', 'Will not push local changes to remote')
     .action(wrap(hotfixClose));
 
-  program
-    .command('bugfix-create [branch]')
-    .description('Create locally a bugfix branch from latest master')
-    .addOption('push', 'Pushes local changes to remote', 'Will not push local changes to remote')
-    .action(wrap(bugfixCreate));
+  if (getConfig().BUGFIX_PREFIX) {
+    program
+      .command('bugfix-create [branch]')
+      .description('Create locally a bugfix branch from latest master')
+      .addOption('push', 'Pushes local changes to remote', 'Will not push local changes to remote')
+      .action(wrap(bugfixCreate));
 
-  program
-    .command('bugfix-close [branch]')
-    .description('Close a bugfix branch to master')
-    .addOption('push', 'Pushes local changes to remote', 'Will not push local changes to remote')
-    .addOption('interactive', 'Interactive rebase', 'No nteractive rebase')
-    .addOption('rewrite', 'Will rewrite commit messages with feature as prefix.', 'Will not rewrite commits')
-    .addOption('ff', 'Will run merge with ff-only', 'Will run merge with no-ff')
-    .addOption('squash', 'Will squash commits into 1', 'Will not squash commits into 1')
-    .action(wrap(bugfixClose));
+    program
+      .command('bugfix-close [branch]')
+      .description('Close a bugfix branch to master')
+      .addOption('push', 'Pushes local changes to remote', 'Will not push local changes to remote')
+      .addOption('interactive', 'Interactive rebase', 'No nteractive rebase')
+      .addOption('rewrite', 'Will rewrite commit messages with feature as prefix.', 'Will not rewrite commits')
+      .addOption('ff', 'Will run merge with ff-only', 'Will run merge with no-ff')
+      .addOption('squash', 'Will squash commits into 1', 'Will not squash commits into 1')
+      .action(wrap(bugfixClose));
+  }
 
   program
     .command('feature-create [branch]')
