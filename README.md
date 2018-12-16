@@ -10,7 +10,7 @@ CLI tool to support Adam Ruka's branching model [oneflow](http://endoflineblog.c
 
 ---
 
-Before using `one-flow` a configiration wizard should be run in order to setup some basic settings. The result of this wizard is saved in `~/.oneflowrc` file. For project specific settings add and commit a `.oneflowrc` file in the root folder of your project.
+Before using `one-flow` a configuration wizard should be run in order to setup some basic settings. The result of this wizard is saved in `~/.oneflowrc` file. For project specific settings add and commit a `.oneflowrc` file in the root folder of your project.
 
 The table below summarizes the supported settings:
 
