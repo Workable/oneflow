@@ -14,7 +14,7 @@ export default async function hotfixClose(branch, tag, options) {
   const config = getConfig(options);
   exec('git fetch origin --tags --prune');
   const latestTagCommit = exec('git rev-list --tags --max-count=1', { log: false });
-  const latestTag = exec(`git describe --tags ${latestTagCommit}`, { log: false });
+  const latestTag = exec(`git describe --tags --match "v[0-9]*" ${latestTagCommit}`, { log: false });
 
   branch = await getBranchPrompt(branch);
   tag = await getTagPrompt(tag, 'create tag?', 'patch');

@@ -130,7 +130,7 @@ export async function getBranchPrompt(branch, defaultName?) {
 export async function getTagPrompt(tag, msg, nextRelease?) {
   if (!tag) {
     const latestTagCommit = exec('git rev-list --tags --max-count=1', { log: false });
-    const latestTag = await exec(`git describe --tags ${latestTagCommit}`, { log: false });
+    const latestTag = await exec(`git describe --tags --match "v[0-9]*" ${latestTagCommit}`, { log: false });
     if (nextRelease) {
       tag = (latestTag && latestTag.startsWith('v') ? 'v' : '') + semver.inc(latestTag, nextRelease);
     } else {
