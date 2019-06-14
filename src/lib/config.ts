@@ -1,6 +1,6 @@
 import homeConfig from 'home-config';
 import path from 'path';
-const packageJson = require('../../package.json');
+import packageJson from '../../package.json';
 
 export const configName = `.${packageJson.name.split('/').pop()}rc`;
 const config = homeConfig.load(configName);

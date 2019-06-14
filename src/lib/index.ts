@@ -11,14 +11,13 @@ import featureClose from './feature-close';
 import releaseCreate from './release-create';
 import releaseClose from './release-close';
 import { hasVersionChanged } from './helpers';
+import packageJson from '../../package.json';
 
 function init() {
   if (!getConfig().initialized) {
     initialize();
     return;
   }
-
-  const packageJson = require('../../package.json');
 
   const wrap = fn => async (...args) => {
     await hasVersionChanged();
