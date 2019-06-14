@@ -6,7 +6,7 @@ import fs from 'fs';
 import semver from 'semver';
 import moment from 'moment';
 import { getConfig, save } from './config';
-const packageJson = require('../../package.json');
+import packageJson from '../../package.json';
 
 export async function hasVersionChanged() {
   if (
