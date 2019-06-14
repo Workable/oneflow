@@ -1,4 +1,4 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { getBranchPrompt, merge, pushBranchToRemoteAndDelete } from './helpers';
 import { getConfig } from './config';
 

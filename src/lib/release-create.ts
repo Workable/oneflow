@@ -3,7 +3,7 @@ import { getTagPrompt, getReleaseName, getCurrentBranch } from './helpers';
 import featureCreate from './feature-create';
 import releaseClose from './release-close';
 import { getConfig } from './config';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 
 export default async function releaseCreate(commit = getConfig().BASE_BRANCH, tag, options) {
   const config = getConfig(options);

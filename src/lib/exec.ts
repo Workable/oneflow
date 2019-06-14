@@ -1,7 +1,7 @@
-import * as chalk from 'chalk';
-import { execSync } from 'child_process';
+import chalk from 'chalk';
+import { execSync, ExecSyncOptions } from 'child_process';
 import { getConfig, resolvePath } from './config';
-import * as fs from 'fs';
+import fs from 'fs';
 
 const debug = getConfig().DEBUG || process.env.DRY_RUN === 'true';
 const debugCmds = [];
@@ -11,7 +11,7 @@ export default function exec(str, { log = true, interactive = false, exit = true
   } else {
     debugCmds.push(chalk.yellow(`-> ${str}`));
   }
-  const options = { stdio: interactive ? 'inherit' : 'pipe', input };
+  const options: ExecSyncOptions = { stdio: interactive ? 'inherit' : 'pipe', input };
 
   if (process.env.DRY_RUN === 'true') {
     return;

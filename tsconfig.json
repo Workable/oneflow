@@ -12,12 +12,15 @@
     "outDir": "./build",
     "baseUrl": "./src",
     "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "paths": {
       "*": [
         "*",
         "lib/*"
       ]
     }
-  },
-  "filesGlob": ["./*.ts"]
+  }
 }

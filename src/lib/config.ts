@@ -1,5 +1,5 @@
-import * as homeConfig from 'home-config';
-import * as path from 'path';
+import homeConfig from 'home-config';
+import path from 'path';
 const packageJson = require('../../package.json');
 
 export const configName = `.${packageJson.name.split('/').pop()}rc`;

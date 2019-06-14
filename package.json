@@ -7,14 +7,13 @@
   "scripts": {
     "clean": "rm -rf ./build",
     "prebuild": "npm run clean",
-    "build": "tsc -p .",
+    "build": "tsc -p ./tsconfig.build.json",
     "prewatch": "npm run clean",
-    "watch": "tsc -w -p .",
+    "watch": "tsc -w -p ./tsconfig.build.json",
     "prepublishOnly": "npm test",
-    "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
+    "lint": "tslint --project tsconfig.json src/**/*.ts",
     "pretest": "npm run lint && npm run build",
-    "test": "istanbul test _mocha build/test/index build/test -- --recursive -R spec --timeout 30000",
-    "posttest": "remap-istanbul -i coverage/coverage.json -o coverage/lcov-report -t html"
+    "test": "nyc mocha -r ts-node/register -r tsconfig-paths/register -r source-map-support/register src/test/index.ts src/test/*.ts --recursive -R spec --timeout 30000"
   },
   "engines": {
     "node": ">= 6.0.0"
@@ -22,32 +21,36 @@
   "bin": {
     "oneflow": "bin/oneflow"
   },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "all": true
+  },
   "author": "Nikos Kostoulas <nikostoulas@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@types/chalk": "^0.4.31",
-    "@types/inquirer": "0.0.35",
-    "@types/mocha": "^2.2.41",
-    "@types/node": "^9.4.6",
-    "@types/should": "^8.3.0",
-    "@types/source-map-support": "^0.4.0",
-    "chalk": "^1.1.3",
-    "commander": "^2.11.0",
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
     "commander-tabtab": "^0.1.0",
-    "figlet": "1.2.0",
+    "figlet": "1.2.3",
     "home-config": "^0.1.0",
-    "inquirer": "3.0.5",
-    "moment": "^2.22.2",
-    "semver": "^5.3.0",
-    "tsconfig-paths": "^2.3.0",
-    "typescript": "^2.5.2"
+    "inquirer": "6.3.1",
+    "moment": "^2.24.0",
+    "semver": "^6.1.1",
+    "tsconfig-paths": "^3.8.0",
+    "typescript": "^3.5.2"
   },
   "devDependencies": {
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0",
-    "remap-istanbul": "^0.9.5",
-    "should": "^11.2.1",
-    "source-map-support": "^0.4.15",
-    "tslint": "^5.4.3"
+    "@istanbuljs/nyc-config-typescript": "^0.1.3",
+    "@types/figlet": "^1.2.0",
+    "@types/inquirer": "6.0.3",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.0.8",
+    "@types/semver": "^6.0.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "should": "^13.2.3",
+    "source-map-support": "^0.5.12",
+    "ts-node": "^8.2.0",
+    "tslint": "^5.17.0"
   }
 }

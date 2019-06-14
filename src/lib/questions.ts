@@ -1,3 +1,5 @@
+import { Question } from "inquirer";
+
 export const pullRequestQuestions = (title, body) => [
   {
     name: 'title',
@@ -13,7 +15,7 @@ export const pullRequestQuestions = (title, body) => [
   }
 ];
 
-export const branchName = (name?, message = 'branch name?') => [
+export const branchName = (name?: string, message = 'branch name?'): Array<Question> => [
   {
     name: 'branchName',
     type: 'input',
@@ -22,21 +24,21 @@ export const branchName = (name?, message = 'branch name?') => [
   }
 ];
 
-export const tagName = (name, message = 'tag?') => ({
+export const tagName = (name: string, message = 'tag?'): Question => ({
   name: 'tagName',
   type: 'input',
   message,
   default: name
 });
 
-export const confirm = (message = 'confirm?') => ({
+export const confirm = (message = 'confirm?'): Question => ({
   name: 'confirm',
   type: 'confirm',
   message,
   default: true
 });
 
-export const initializeConfig = config => [
+export const initializeConfig = (config: any): Array<Question> => [
   {
     name: 'BASE_BRANCH',
     type: 'input',
