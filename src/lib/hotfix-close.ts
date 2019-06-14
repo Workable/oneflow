@@ -1,5 +1,5 @@
 import exec, { revert } from './exec';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import {
   createTag,
   pushBranchToRemoteAndDelete,

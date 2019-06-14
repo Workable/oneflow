@@ -1,6 +1,6 @@
 import exec, { revert } from './exec';
-import * as chalk from 'chalk';
-import * as inquirer from 'inquirer';
+import chalk from 'chalk';
+import inquirer from 'inquirer';
 import { branchName } from './questions';
 import { getCurrentBranch, pushToRemote } from './helpers';
 import { getConfig } from './config';

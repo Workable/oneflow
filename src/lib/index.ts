@@ -1,7 +1,7 @@
 import initialize from './initialize';
 import { getConfig, options } from './config';
-import * as program from 'commander';
-import * as taptapCommander from 'commander-tabtab';
+import program from 'commander';
+import taptapCommander from 'commander-tabtab';
 import hotfixCreate from './hotfix-create';
 import hotfixClose from './hotfix-close';
 import bugfixCreate from './bugfix-create';

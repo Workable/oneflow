@@ -1,5 +1,5 @@
 import exec from './exec';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { merge, pushBranchToRemoteAndDelete, getTagPrompt, createTag, getReleaseName } from './helpers';
 import { getConfig } from './config';
 

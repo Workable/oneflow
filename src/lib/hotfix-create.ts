@@ -1,7 +1,7 @@
 import exec from './exec';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { getBranchPrompt, getTagPrompt, getCurrentBranch, pushToRemote } from './helpers';
-import * as semver from 'semver';
+import semver from 'semver';
 import { getConfig } from './config';
 
 export default async function hotfixCreate(branch, tag, options) {

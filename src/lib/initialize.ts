@@ -1,14 +1,14 @@
 import { initializeConfig } from './questions';
-import * as inquirer from 'inquirer';
-import * as chalk from 'chalk';
-import * as figlet from 'figlet';
-import * as homeConfig from 'home-config';
+import inquirer from 'inquirer';
+import chalk from 'chalk';
+import figlet from 'figlet';
+import homeConfig from 'home-config';
 let config = homeConfig.load('.oneflowrc');
-const packageJson = require('../../package.json');
+import packageJson  from '../../package.json';
 import { resolvePath, configName } from './config';
+import sampleConfig from '../../config.sample.json';
 
 export default async function initialize(options = {} as any) {
-  const sampleConfig = require('../../config.sample.json');
   if (options.local) {
     Object.assign(sampleConfig, config);
     config = homeConfig.load(resolvePath(configName));

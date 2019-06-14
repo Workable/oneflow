@@ -1,10 +1,10 @@
 import exec, { revert, runRevert } from './exec';
-import * as inquirer from 'inquirer';
+import inquirer from 'inquirer';
 import { branchName, confirm, tagName } from './questions';
-import * as chalk from 'chalk';
-import * as fs from 'fs';
-import * as semver from 'semver';
-import * as moment from 'moment';
+import chalk from 'chalk';
+import fs from 'fs';
+import semver from 'semver';
+import moment from 'moment';
 import { getConfig, save } from './config';
 const packageJson = require('../../package.json');
 

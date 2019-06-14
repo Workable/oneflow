@@ -1,15 +1,5 @@
-import { install } from 'source-map-support';
-install();
-import * as path from 'path';
-import * as tsConfigPaths from 'tsconfig-paths';
 import 'should';
 
-const tsConfig = require('../../tsconfig.json');
-const baseUrl = path.resolve(tsConfig.compilerOptions.outDir);
-tsConfigPaths.register({
-  baseUrl,
-  paths: tsConfig.compilerOptions.paths
-});
 (process.env as any).NODE_ENV = 'test';
 
 import exec from 'exec';
