@@ -104,7 +104,7 @@ export async function pushBranchToRemoteAndDelete(branch, shouldPush?) {
         true
       )
     });
-    exec(`git branch -d ${branch} && git push origin :refs/heads/${branch}`);
+    exec(`git branch -d ${branch} && git push origin :refs/heads/${branch}`, { exit: false });
     return true;
   } else {
     console.log(`Please run: ${chalk.red(
