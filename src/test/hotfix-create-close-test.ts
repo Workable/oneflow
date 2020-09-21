@@ -32,7 +32,7 @@ describe('hotfix-create hotfix-close', function () {
       .assertLocalCommitMsg(commitMsg);
   });
 
-  it.only('should throw an error and stop hotfix-close if unstashed changes exist', function () {
+  it('should throw an error and stop hotfix-close if unstashed changes exist', function () {
     sandbox.stub(process, 'exit').throws(new Error('error'));
     this.tag('3.0.0');
     this.commit('going forward...').commit('and forward');
