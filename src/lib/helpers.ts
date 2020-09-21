@@ -144,6 +144,10 @@ export async function getTagPrompt(tag, msg, nextRelease?) {
 export function createTag(tag, branch) {
   revertBranch(branch);
   if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING) {
+    if (Number(exec('git update-index --refresh | wc -l')) > 0) {
+      console.log(chalk.red('Uncommitted changes exist. Please stash them and retry.'));
+      process.exit(1);
+    }
     let commitMessage = tag;
     let versionBumped = false;
     if (fs.existsSync('package.json')) {
@@ -174,12 +178,12 @@ export function createTag(tag, branch) {
   }
 
   getConfig().RUN_CMD_AFTER_TAG_CREATION &&
-    exec(
-      getConfig()
-        .RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag)
-        .replace('${branch}', branch),
-      { interactive: true }
-    );
+  exec(
+    getConfig()
+      .RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag)
+      .replace('${branch}', branch),
+    { interactive: true }
+  );
 }
 
 export async function prompt(msg): Promise<boolean> {
