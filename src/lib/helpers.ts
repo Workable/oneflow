@@ -178,12 +178,12 @@ export function createTag(tag, branch) {
   }
 
   getConfig().RUN_CMD_AFTER_TAG_CREATION &&
-  exec(
-    getConfig()
-      .RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag)
-      .replace('${branch}', branch),
-    { interactive: true }
-  );
+    exec(
+      getConfig()
+        .RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag)
+        .replace('${branch}', branch),
+      { interactive: true }
+    );
 }
 
 export async function prompt(msg): Promise<boolean> {
