@@ -4,15 +4,11 @@ import * as sinon from 'sinon';
 const sandbox = sinon.createSandbox();
 describe('hotfix-create hotfix-close', function () {
   it('should create hotfix from latest tag', function () {
-    afterEach(function () {
-      sandbox.restore();
-    });
-
     this.tag('1.0.0');
     const { commit, commitMsg } = this.getCommit();
     this.commit('going forward...')
       .commit('and forward')
-      .oneflow('hotfix-create hotfix 1.0.0')
+      .oneflow('hotfix-create hotfix 1.0.0 -p')
       .assertLocalCommitMsg(commitMsg)
       .assertLocalOnCommit(commit);
   });
@@ -32,19 +28,29 @@ describe('hotfix-create hotfix-close', function () {
       .assertLocalCommitMsg(commitMsg);
   });
 
-  it('should throw an error and stop hotfix-close if unstashed changes exist', function () {
-    sandbox.stub(process, 'exit').throws(new Error('error'));
-    this.tag('3.0.0');
-    this.commit('going forward...').commit('and forward');
-    const { commit } = this.getCommit();
-    this.oneflow('hotfix-create hotfix2 3.0.0 -p').commit('hotfix commit', 'file.txt');
+  describe('if unstashed changes exist', function () {
+    beforeEach(function () {
+      sandbox.stub(process, 'exit').throws(new Error('error'));
+    });
 
-    this.local(`echo "{}">>package.json && git add package.json && git commit -m "Add package.json"`);
-    this.local(`echo "{}">>init.txt`);
+    afterEach(function () {
+      sandbox.restore();
+      this.local(`git reset --hard master`);
+    });
 
-    assert.throws(() => this.oneflow('hotfix-close hotfix2 3.0.1 -p').assertLocalOnCommit(commit), {
-      name: 'Error',
-      message: 'error',
+    it('should throw an error and stop hotfix-close ', function () {
+      this.tag('2.1.0');
+      this.commit('going forward...').commit('and forward');
+      const { commit } = this.getCommit();
+      this.oneflow('hotfix-create hotfix3 2.1.0 -p').commit('hotfix commit', 'file.txt');
+
+      this.local(`echo "{}">>package.json && git add package.json && git commit -m "Add package.json"`);
+      this.local(`echo "{}">>init.txt`);
+
+      assert.throws(() => this.oneflow('hotfix-close hotfix3 2.1.1 -p').assertLocalOnCommit(commit), {
+        name: 'Error',
+        message: 'error',
+      });
     });
   });
 });
