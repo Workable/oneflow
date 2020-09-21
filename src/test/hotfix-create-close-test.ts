@@ -47,7 +47,7 @@ describe('hotfix-create hotfix-close', function () {
       this.local(`echo "{}">>package.json && git add package.json && git commit -m "Add package.json"`);
       this.local(`echo "{}">>init.txt`);
 
-      assert.throws(() => this.oneflow('hotfix-close hotfix3 2.1.1 -p').assertLocalOnCommit(commit), {
+      assert.throws(() => this.oneflow('hotfix-close hotfix3 2.1.1 -p -R').assertLocalOnCommit(commit), {
         name: 'Error',
         message: 'error',
       });
