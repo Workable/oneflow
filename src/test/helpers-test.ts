@@ -17,7 +17,7 @@ describe.skip('helpers', function() {
         .local('git add . && git commit -m "adding version files"')
         .oneflow('release-create master 1.1.0 -p')
         .oneflow('release-close 1.1.0 -p')
-        .assertLocalCommitMsg('[oneflow] prepare for next development iteration 1.2.0-SNAPSHOT')
+        .assertLocalCommitMsg('[oneflow] prepare for next development iteration v1.2.0-SNAPSHOT')
         .assertLocalCommitMsg('[oneflow] v1.1.0', -1);
 
       const { commit: commitOfTag } = this.getCommit('v1.1.0');

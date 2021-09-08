@@ -127,6 +127,10 @@ export async function getBranchPrompt(branch, defaultName?) {
   return branch;
 }
 
+function shouldPrependWithV(tag) {
+  return fs.existsSync('package.json') || tag.startsWith('v');
+}
+
 export async function getTagPrompt(tag, msg, nextRelease?) {
   if (!tag) {
     const latestTagCommit = exec('git rev-list --tags --max-count=1', { log: false });
@@ -138,7 +142,7 @@ export async function getTagPrompt(tag, msg, nextRelease?) {
     }
     ({ tagName: tag } = await inquirer.prompt(tagName(tag, msg)));
   }
-  return (fs.existsSync('package.json') ? 'v' : '') + semver.valid(tag);
+  return (shouldPrependWithV(tag) ? 'v' : '') + semver.valid(tag);
 }
 
 export function createTag(tag, branch) {
@@ -171,19 +175,16 @@ export function createTag(tag, branch) {
   revert(`git tag -d ${tag}`);
 
   if (getConfig().CHANGE_VERSIONS_WHEN_TAGGING && fs.existsSync('pom.xml')) {
-    const nextVersion = `${semver.inc(tag, 'minor')}-SNAPSHOT`;
+    const nextVersion = `${shouldPrependWithV(tag) ? 'v' : ''}${semver.inc(tag, 'minor')}-SNAPSHOT`;
     exec(`mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${nextVersion}`);
     const commitMessage = `prepare for next development iteration ${nextVersion}`;
     exec(`git commit -am "[oneflow] ${commitMessage}"`);
   }
 
   getConfig().RUN_CMD_AFTER_TAG_CREATION &&
-    exec(
-      getConfig()
-        .RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag)
-        .replace('${branch}', branch),
-      { interactive: true }
-    );
+    exec(getConfig().RUN_CMD_AFTER_TAG_CREATION.replace('${tag}', tag).replace('${branch}', branch), {
+      interactive: true
+    });
 }
 
 export async function prompt(msg): Promise<boolean> {
