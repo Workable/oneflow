@@ -143,6 +143,6 @@ Available options:
 
 ```
   -P, --no-push-flag   Will not push local changes to remote
-  -M, --no-merge-flag  Will not merge after creating tag if called with -c
+  -M, --no-merge-flag  Will not merge after creating tag
   -h, --help           output usage information
 ```

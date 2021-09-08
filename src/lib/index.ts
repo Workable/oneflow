@@ -101,8 +101,8 @@ function init() {
     .addOption('push', 'Pushes local changes to remote', 'Will not push local changes to remote')
     .addOption(
       'merge',
-      'Will merge after creating tag if called with -c',
-      'Will not merge after creating tag if called with -c'
+      'Will merge after creating tag',
+      'Will not merge after creating tag'
     )
     .action(wrap(releaseClose));
 
